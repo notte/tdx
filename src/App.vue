@@ -11,17 +11,25 @@ export default defineComponent({
   name: "App",
   setup() {
     onMounted(() => {
+      let width = window.innerWidth,
+        height = window.innerHeight;
       const svg = d3
         .select("#nav")
         .append("svg")
-        .attr("width", "100%")
-        .attr("height", "100%")
+        .attr("width", width)
+        .attr("height", height)
         .attr("style", "border:3px solid #999999")
         .attr("id", "container");
-      // 121, 24
-      let projection = d3.geoMercator().center([121, 24]).scale(1000);
+
+      let projection = d3
+        .geoMercator()
+        .scale(100)
+        .translate([width / 2, height / 2 - 80])
+        .center([121, 24]);
       let path = d3.geoPath().projection(projection);
-      console.log(path);
+
+      let zoom = d3.zoom().scaleExtent([1, 30]);
+      console.log(zoom);
 
       d3.json<Model.IResponseData>("./map.geojson")
         .then((data) => {
@@ -34,7 +42,8 @@ export default defineComponent({
               .attr("d", path as never)
               .attr("id", (d) => {
                 return d.properties["COUNTYENG"].split(" ")[0];
-              });
+              })
+              .call(zoom as never);
           }
         })
         .catch();
