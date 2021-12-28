@@ -12,7 +12,7 @@
     "@turf/rewind": "^6.5.0",
     "@types/d3-geo": "^3.0.2",
     "core-js": "^3.6.5",
-    "d3": "^7.2.1",
+    "d3": "^6.0.0",
     "d3-queue": "^3.0.7",
     "register-service-worker": "^1.7.1",
     "sass": "^1.45.1",
