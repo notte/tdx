@@ -20,3 +20,8 @@ export interface IGeometry {
   type: string;
   coordinates: number[][][];
 }
+
+export interface IMapSize {
+  width: number;
+  height: number;
+}

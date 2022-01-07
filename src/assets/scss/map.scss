@@ -1,8 +1,81 @@
-.map{
-    // width: 50vw;
-    // height: 100vh;
-    // position: relative;
-    // left: 50%;
-    // transform: translateX(-50%);
-    // background-color: aquamarine;
+.container {
+    // 父組件設定
+    display: flex;
+    height: 100%;
+    width: 100%;
 }
+
+.map {
+    background-color: #c2cea2;
+    flex: 6;
+
+    path {
+        cursor: pointer;
+        fill: transparent;
+        stroke: #fff;
+
+        &:hover {
+            box-shadow: 0 0 3px #000;
+            fill: rgba(#fff, 0.85);
+            stroke: transparent;
+        }
+    }
+}
+
+.menu {
+    flex: 3;
+
+    .position {
+        height: auto;
+        padding: 30px;
+        position: relative;
+        text-align: left;
+        top: 50%;
+        transform: translateY(-50%);
+        width: auto;
+
+        p {
+            color: #ccc;
+            font-size: 15px;
+        }
+
+        h2 {
+            color: #eb8706;
+            margin-bottom: 10px;
+        }
+
+        button {
+            background-color: #c2cea2;
+            border: 0;
+            border-radius: 99px;
+            color: #fff;
+            padding: 10px 30px;
+        }
+    }
+}
+
+
+// RWD
+@media screen and (max-width: 480px) {
+    .container {
+        display: block;
+        position: relative;
+        // 父組件設定
+        // flex-direction: row;
+    }
+
+    .map {
+        height: 100%;
+        position: relative;
+        width: 100%;
+    }
+
+    .menu {
+        .position {
+            background-color: #fff;
+            position: absolute;
+        }
+    }
+}
+
+// https://www.palettable.io/C2CEA2-EB8706-C25337
