@@ -7,8 +7,8 @@ import * as d3 from "d3";
 export default defineComponent({
   setup() {
     EventBus.on("send-map-size", (data) => {
-      let width = (data as Model.IMapSize).width;
-      let height = (data as Model.IMapSize).height;
+      let width = (data as Model.IMapSize).width - 100;
+      let height = (data as Model.IMapSize).height - 100;
 
       let projection = d3
         .geoMercator()
@@ -21,7 +21,7 @@ export default defineComponent({
         .append("svg")
         .attr("width", width)
         .attr("height", height)
-        .attr("id", "container");
+        .attr("id", "svg-container");
       let g = svg.append("g").attr("id", "group");
 
       d3.json<Model.IResponseData>("./map.geojson").then((data) => {
