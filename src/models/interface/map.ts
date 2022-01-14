@@ -25,3 +25,8 @@ export interface IMapSize {
   width: number;
   height: number;
 }
+
+export interface ISelectedCity {
+  en: string;
+  cn: string;
+}

@@ -1,9 +1,8 @@
 <template>
-  <router-view />
+  <div>bike list</div>
 </template>
 <script lang="ts">
 import { defineComponent } from "vue";
-import "@/assets/scss/common.scss";
 
 export default defineComponent({
   components: {},

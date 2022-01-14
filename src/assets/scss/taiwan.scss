@@ -1,0 +1,96 @@
+$white: #fff5ed;
+$bigbg: #a56a4c;
+$title: #f2a640;
+$text: #b7774b;
+
+.container {
+    // 父組件設定
+    display: flex;
+    height: 100%;
+    width: 100%;
+}
+
+.map {
+    background-color: $bigbg;
+    flex: 6;
+
+    path {
+        cursor: pointer;
+        fill: transparent;
+        stroke: $white;
+
+        &:hover,
+        &.active {
+            fill: rgba($white, 1);
+            stroke: transparent;
+        }
+        
+    }
+}
+
+.menu {
+    flex: 3;
+
+    .position {
+        height: auto;
+        padding: 30px;
+        position: relative;
+        text-align: left;
+        top: 50%;
+        transform: translateY(-50%);
+        width: auto;
+
+        p {
+            color: $text;
+            font-size: 15px;
+        }
+
+        h2 {
+            color: $title;
+            margin-bottom: 10px;
+        }
+
+        button {
+            background-color: $bigbg;
+            border: 0;
+            border-radius: 99px;
+            color: $white;
+            cursor: pointer;
+            padding: 10px 30px;
+        }
+
+        button:hover {
+            background-color: $title;
+        }
+    }
+}
+
+
+// RWD
+@media screen and (max-width: 480px) {
+    .container {
+        display: block;
+        position: relative;
+    }
+
+    .map {
+        align-items: center;
+        display: flex;
+        height: 80%;
+        justify-content: center;
+        width: 100%;
+    }
+
+    .menu {
+        background-color: $white;
+        height: 20%;
+        position: relative;
+
+
+        .position {
+            padding: 0;
+            text-align: center;
+            width: 100%;
+        }
+    }
+}

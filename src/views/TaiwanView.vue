@@ -1,42 +1,60 @@
 <template>
   <div class="container">
     <div class="map" ref="map">
-      <Map />
+      <Taiwan />
     </div>
     <div class="menu">
       <div class="position">
         <p>想要去哪裡呢？</p>
         <h2 ref="local">選一個地方吧</h2>
-        <button>出發</button>
+        <button @click="toCity">出發</button>
       </div>
     </div>
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, ref, onMounted } from "vue";
-import Map from "@/components/Map.vue";
+import { defineComponent, ref, onMounted, watch } from "vue";
+import { useRouter } from "vue-router";
+import Taiwan from "@/components/Taiwan.vue";
 import EventBus from "@/utilities/event-bus";
+import { cityStore } from "@/store/index";
 import * as Model from "@/models/interface/map";
-import "@/assets/scss/map.scss";
+import "@/assets/scss/taiwan.scss";
 
 export default defineComponent({
   components: {
-    Map,
+    Taiwan,
   },
   setup() {
+    const store = cityStore();
     const map = ref();
     const local = ref();
+    const router = useRouter();
+    let city = ref();
+
+    const toCity = (): void => {
+      router.push({
+        name: "City",
+        params: { id: store.en },
+      });
+    };
+
     onMounted(() => {
       const data: Model.IMapSize = {
         width: map.value.offsetWidth,
         height: map.value.offsetHeight,
       };
       EventBus.emit("send-map-size", data);
-      EventBus.on("send-click-city", (data) => {
-        local.value.innerHTML = data;
-      });
     });
-    return { map, local };
+
+    watch(
+      () => store.cn,
+      () => {
+        local.value.innerHTML = store.cn;
+      }
+    );
+
+    return { map, local, city, toCity };
   },
 });
 </script>

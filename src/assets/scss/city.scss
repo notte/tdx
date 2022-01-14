@@ -1,0 +1,169 @@
+$main: #9c2bff;
+$white: #fcf9fc;
+$black: #361901;
+$red: #840523;
+$deepPurple: #662381;
+$white: #d2bfe3;
+
+$bigbg: #a56a4c;
+$title: #f2a640;
+$text: #b7774b;
+// #E0B68D #E0B68D #AD4D32
+
+
+.main {
+    background-color: $main;
+    height: 100px;
+    position: relative;
+    width: 100px;
+}
+
+.sec {
+    background-color: $white;
+    height: 30px;
+    left: 50%;
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%);
+    width: 30px;
+}
+
+.container {
+    display: flex;
+    height: 100%;
+    width: 100%;
+
+    .map { 
+        flex: 3;
+    }
+
+    .tab-container {
+        display: flex;
+        flex: 2;
+        flex-direction: column;
+        overflow: hidden;
+
+        .tab {
+            margin: 0 auto;
+            text-align: center;
+
+            button {
+                background-color: transparent;
+                border: 0;
+                color: rgba($title, 0.5);
+                cursor: pointer;
+                flex: 1;
+                font-size: 16px;
+                font-weight: 900;
+                margin: 20px 5px 0;
+            }
+    
+            button.active {
+                color: rgba($title, 1);
+            }
+
+        }
+
+
+        .tab-content {
+            overflow-y: auto;
+            padding: 20px;
+        }
+    }
+
+}
+
+
+.search {
+    margin: 0 auto;
+
+    .search-item {
+        margin-bottom: 10px;
+        // display: inline-block;
+        // width: 50%;
+    }
+
+    p {
+        color: $black;
+        font-size: 13px;
+        margin-bottom: 3px;
+    }
+
+    input,
+    select {
+        border: 1px $black solid;
+        border-radius: 3px;
+        color: $black;
+        font-size: 14px;
+        height: 30px;
+        padding: 0 5px;
+        width: 100%;
+    }
+
+    button {
+        background-color: $bigbg;
+        border: 0;
+        border-radius: 30px;
+        color: $white;
+        cursor: pointer;
+        font-size: 14px;
+        margin: 10px 10px 10px 0;
+        padding: 8px 30px;
+    }
+    
+    button.clear {
+        background-color: $red;
+    }
+}
+
+.list {
+    overflow-y: auto;
+    padding: 15px;
+
+    .item {
+        border-bottom: 1px $black dashed;
+        margin-bottom: 15px;
+        padding-bottom: 15px;
+    }
+
+    .item:last-child {
+        border-bottom: 0;
+        padding-bottom: 0;
+    }
+
+    .tag {
+        p {
+            color: $bigbg;
+            font-size: 14px;
+        }
+    }
+
+    p {
+        color: $black;
+        font-size: 13px;
+    }
+
+    p.level {
+        background-color: $red;
+        color: $white;
+        font-weight: 900;
+        padding: 3px;
+        width: max-content;
+    }
+
+    h3 {
+        color: $title;
+    }
+
+
+    .img {
+        height: 250px;
+        overflow: hidden;
+        width: 100%;
+
+        img {
+            height: 100%;
+            width: 100%;
+        }
+    }
+}

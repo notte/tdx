@@ -9,7 +9,12 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: "/map",
     name: "Map",
-    component: () => import("@/views/MapView.vue"),
+    component: () => import("@/views/TaiwanView.vue"),
+  },
+  {
+    path: "/:id",
+    name: "City",
+    component: () => import("@/views/CityView.vue"),
   },
 ];
 
