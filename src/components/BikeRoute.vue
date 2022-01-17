@@ -1,7 +1,4 @@
 <template>
-  <div class="main">
-    <div class="sec"></div>
-  </div>
   <div class="search" style="display: none">
     <div class="search-item">
       <p>關鍵字</p>
@@ -43,6 +40,24 @@
     <button>搜尋</button>
   </div>
   <div class="list" style="display: none">
+    <div class="item">
+      <p class="level">難度級別：3</p>
+      <div class="img">
+        <img
+          src="https://taiwanbike.taiwan.net.tw/Content/Route/IndexImage/11.jpg"
+          alt=""
+        />
+      </div>
+      <h3>龍門-鹽寮自行車道</h3>
+      <p class="describe">
+        從福隆火車站銜接至龍門河濱公園的露營區，再經龍門吊橋至鹽寮海濱公園，沿途車道上均有生態解說牌示，是瞭解濱海生態的最佳騎乘路線。若從鹽寮繼續往前騎乘，還可順遊澳底漁港，大啖海鮮大餐！
+      </p>
+
+      <div class="tag">
+        <p>適合對象：家庭親子族</p>
+        <p>車道長度：8公里</p>
+      </div>
+    </div>
     <div class="item">
       <p class="level">難度級別：3</p>
       <div class="img">

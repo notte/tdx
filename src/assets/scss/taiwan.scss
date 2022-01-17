@@ -1,3 +1,10 @@
+$main: #635dc0;
+$white: #fcf9fc;
+$black: #686868;
+$red: #cb3737;
+$grey: #97949c;
+
+
 .container {
     // 父組件設定
     display: flex;
@@ -6,17 +13,17 @@
 }
 
 .map {
-    background-color: #e9b256;
+    background-color: $grey;
     flex: 6;
 
     path {
         cursor: pointer;
         fill: transparent;
-        stroke: #fff;
+        stroke: $white;
 
         &:hover,
         &.active {
-            fill: rgba(#fff, 1);
+            fill: rgba($white, 1);
             stroke: transparent;
         }
         
@@ -40,15 +47,15 @@
         }
 
         h1 {
-            color: #525252;
+            color: $main;
             margin-bottom: 10px;
         }
 
         button {
-            background-color: #eab255;
+            background-color: $black;
             border: 0;
             border-radius: 99px;
-            color: #fff;
+            color: $white;
             cursor: pointer;
             font-size: 15px;
             font-weight: 900;
@@ -56,13 +63,11 @@
         }
 
         button:hover {
-            background-color: #ffc462;
+            background-color: $main;
         }
     }
 }
 
-
-// RWD
 @media screen and (max-width: 480px) {
     .container {
         display: block;
@@ -78,7 +83,7 @@
     }
 
     .menu {
-        background-color: #fff;
+        background-color: $white;
         height: 20%;
         position: relative;
 
