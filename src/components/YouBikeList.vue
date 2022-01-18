@@ -1,5 +1,5 @@
 <template>
-  <div class="youbike-list">
+  <div class="youbike-list" style="display: none">
     <div class="item">
       <h3 class="name">XXX Youbike 租借站</h3>
       <div class="set">

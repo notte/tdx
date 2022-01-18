@@ -1,8 +1,8 @@
-$main: #635dc0;
+$main: #7e5dd9;
 $white: #fcf9fc;
-$black: #686868;
+$black: #616161;
 $red: #cb3737;
-$grey: #97949c;
+$grey: #c2c2c2;
 
 
 .container {
@@ -13,7 +13,7 @@ $grey: #97949c;
 }
 
 .map {
-    background-color: $grey;
+    background-color: $black;
     flex: 6;
 
     path {
@@ -47,12 +47,12 @@ $grey: #97949c;
         }
 
         h1 {
-            color: $main;
+            color: $black;
             margin-bottom: 10px;
         }
 
         button {
-            background-color: $black;
+            background-color: $main;
             border: 0;
             border-radius: 99px;
             color: $white;

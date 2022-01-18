@@ -1,23 +1,28 @@
 <template>
-  <div>city</div>
+  <div>{{ (latitude, longitude) }}</div>
 </template>
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, ref } from "vue";
 
 export default defineComponent({
   components: {},
   setup() {
-    navigator.geolocation.getCurrentPosition((position) => {
-      console.log(position.coords.latitude, position.coords.longitude);
-    });
+    let latitude = ref();
+    let longitude = ref();
 
-    let watchId = navigator.geolocation.watchPosition((position) => {
-      console.log(position.coords.latitude, position.coords.longitude);
-    });
+    /* eslint-disable no-undef */
+    function success(position: GeolocationPosition): void {
+      longitude.value = position.coords.altitude;
+      latitude.value = position.coords.longitude;
+      console.log(position.coords);
+    }
+    function error(error: GeolocationPositionError): void {
+      console.log("error:" + error.message);
+    }
+    let options = { enableHighAccuracy: true };
+    let watchId = navigator.geolocation.watchPosition(success, error, options);
 
-    console.log(watchId);
-
-    return {};
+    return { success, error, options, watchId, latitude, longitude };
   },
 });
 </script>

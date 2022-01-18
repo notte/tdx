@@ -1,8 +1,8 @@
-$main: #635dc0;
+$main: #7e5dd9;
 $white: #fcf9fc;
-$black: #686868;
+$black: #616161;
 $red: #cb3737;
-$grey: #97949c;
+$grey: #c2c2c2;
 
 .container {
     display: flex;
@@ -87,13 +87,16 @@ $grey: #97949c;
         padding: 8px 30px;
     }
 
-    button:hover,
-    button.clear:hover {
-        background-color: $main;
+    button:hover {
+        background-color: #363636;
     }
     
     button.clear {
         background-color: $red;
+    }
+
+    button.clear:hover {
+        background-color: #791919;
     }
 }
 
@@ -156,7 +159,7 @@ $grey: #97949c;
 
     .item {
         border-bottom: 1px $grey dashed;
-        margin: 20px 40px;
+        margin: 0 40px;
         padding: 20px;
         
     }
