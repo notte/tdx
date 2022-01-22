@@ -1,7 +1,5 @@
-$main: #7e5dd9;
 $white: #fcf9fc;
 $black: #616161;
-$red: #cb3737;
 $grey: #c2c2c2;
 
 
@@ -13,17 +11,19 @@ $grey: #c2c2c2;
 }
 
 .map {
-    background-color: $black;
     flex: 6;
 
     path {
         cursor: pointer;
         fill: transparent;
-        stroke: $white;
+        stroke: #eed8b3;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        stroke-width: 2px;
 
         &:hover,
         &.active {
-            fill: rgba($white, 1);
+            fill: rgba(#eed8b3, 1);
             stroke: transparent;
         }
         
@@ -52,18 +52,18 @@ $grey: #c2c2c2;
         }
 
         button {
-            background-color: $main;
+            background-color: #e8c17f;
             border: 0;
-            border-radius: 99px;
+            border-radius: 5px;
             color: $white;
             cursor: pointer;
             font-size: 15px;
             font-weight: 900;
-            padding: 10px 30px;
+            padding: 10px 80px;
         }
 
         button:hover {
-            background-color: $main;
+            background-color: #fce2b5;
         }
     }
 }

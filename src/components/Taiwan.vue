@@ -18,7 +18,7 @@ export default defineComponent({
       if (width > 1366) {
         scale = 11000;
       } else if (width <= 1366 && width > 480) {
-        scale = 9000;
+        scale = 10000;
       } else if (width <= 480 && width > 320) {
         scale = 8000;
       } else {

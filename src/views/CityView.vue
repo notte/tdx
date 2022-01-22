@@ -8,6 +8,7 @@
       </div>
       <BikeRoute class="tab-content" />
       <YouBikeList class="tab-content" />
+      <RouteItem class="tab-content" />
     </div>
   </div>
 </template>
@@ -16,11 +17,12 @@ import { defineComponent } from "vue";
 import City from "@/components/City.vue";
 import { cityStore } from "@/store/index";
 import BikeRoute from "@/components/BikeRoute.vue";
+import RouteItem from "@/components/RouteItem.vue";
 import YouBikeList from "@/components/YouBikeList.vue";
 import "@/assets/scss/city.scss";
 
 export default defineComponent({
-  components: { City, BikeRoute, YouBikeList },
+  components: { City, BikeRoute, YouBikeList, RouteItem },
   setup() {
     const store = cityStore();
     return { store };
