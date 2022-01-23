@@ -299,10 +299,13 @@ $grey: #c2c2c2;
     .route {
         color: $black;
 
+        li {
+            cursor: pointer;
+        }
+
         li > span {
             border: 1px $black solid;
             border-radius: 99px;
-            cursor: pointer;
             display: inline-block;
             font-weight: 900;
             margin: 10px 0;
@@ -321,6 +324,10 @@ $grey: #c2c2c2;
             position: absolute;
             transform: translateX(-50%);
             width: 2px;
+        }
+
+        li:last-child > span::after {
+            display: none;
         }
 
         p {

@@ -107,24 +107,31 @@
     </div>
     <div class="block route">
       <h3>路線</h3>
-      <!-- <ul>
-        <li>冬山火車站</li>
-        <li>冬山河森林公園</li>
-        <li>珍珠社區</li>
-        <li>冬山河親水公園</li>
-        <li>老街</li>
-        <li>親水公園</li>
-      </ul> -->
       <ul>
         <li>
           <span>A</span>
           <p>冬山火車站</p>
         </li>
-        <li><span>B</span></li>
-        <li><span>C</span></li>
-        <li><span>D</span></li>
-        <li><span>E</span></li>
-        <li><span>F</span></li>
+        <li>
+          <span>B</span>
+          <p>冬山河森林公園</p>
+        </li>
+        <li>
+          <span>C</span>
+          <p>珍珠社區</p>
+        </li>
+        <li>
+          <span>D</span>
+          <p>冬山河親水公園</p>
+        </li>
+        <li>
+          <span>E</span>
+          <p>老街</p>
+        </li>
+        <li>
+          <span>F</span>
+          <p>親水公園</p>
+        </li>
       </ul>
     </div>
   </div>
