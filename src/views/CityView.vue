@@ -6,9 +6,9 @@
         <button class="active">腳踏車路線列表</button
         ><button>Youbike 列表</button>
       </div>
-      <BikeRoute class="tab-content" />
       <YouBikeList class="tab-content" />
-      <RouteItem class="tab-content" />
+      <!-- <BikeRoute class="tab-content" /> -->
+      <!-- <RouteItem class="tab-content" /> -->
     </div>
   </div>
 </template>

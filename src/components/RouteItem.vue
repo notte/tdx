@@ -1,6 +1,8 @@
 <template>
   <div class="route-item">
-    <h2>龍門-鹽寮自行車道</h2>
+    <div class="block">
+      <h2>龍門-鹽寮自行車道</h2>
+    </div>
     <div class="base block">
       <div class="img">
         <img
@@ -105,34 +107,20 @@
         這條從龍門公園到鹽寮海濱公園之間的自行車專用道，一般車輛禁止進入，僅容路人和自行車經過，來回全長約8公里，難度不高，是全家大小一起騎單車的好去處。從龍門露營區出發後，會先經過雙溪河畔上紅色的龍門吊橋，長度約200公尺，騎在橋上感覺非常刺激。<br /><br />沿著路上的紅色線標，可選擇海濱路徑或木麻黃林路徑，步道上並有豎立生態看板，極具寓教於樂功能。在到達鹽寮海濱公園前除了有昭惠廟和慈仁宮等廟宇不同景點，途中也有龍門社區的涼亭可供休息。
       </div>
     </div>
-    <div class="block route">
+    <div class="block edit-route">
       <h3>路線</h3>
-      <ul>
-        <li>
-          <span>A</span>
-          <p>冬山火車站</p>
-        </li>
-        <li>
-          <span>B</span>
-          <p>冬山河森林公園</p>
-        </li>
-        <li>
-          <span>C</span>
-          <p>珍珠社區</p>
-        </li>
-        <li>
-          <span>D</span>
-          <p>冬山河親水公園</p>
-        </li>
-        <li>
-          <span>E</span>
-          <p>老街</p>
-        </li>
-        <li>
-          <span>F</span>
-          <p>親水公園</p>
-        </li>
-      </ul>
+      <p>拖曳地點可以自訂路線哦！</p>
+
+      <div class="point" draggable="true">
+        <span>A</span>
+        <p>冬山火車站</p>
+        <button>刪除</button>
+      </div>
+      <div class="point" draggable="true">
+        <span>A</span>
+        <p>冬山火車站</p>
+        <button>刪除</button>
+      </div>
     </div>
   </div>
 </template>
