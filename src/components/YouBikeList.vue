@@ -3,7 +3,7 @@
     <div class="search">
       <div class="search-item">
         <p>關鍵字</p>
-        <input v-model="word" type="search" />
+        <input type="search" />
       </div>
       <button class="clear" @click="clear">清除</button>
       <button>搜尋</button>
@@ -28,12 +28,14 @@
 </template>
 <script lang="ts">
 import { defineComponent } from "vue";
-import { API } from "@/utilities/apihandler";
+import { API } from "@/utilities/api-handler";
 
 export default defineComponent({
   components: {},
   setup() {
-    // let data = new API("1", "2");
+    const handler = new API.handler("1", "get");
+    handler.createAxios();
+    // console.log(handler);
     return {};
   },
 });
