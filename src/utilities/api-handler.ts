@@ -1,93 +1,77 @@
-import axios, { AxiosRequestConfig, Method } from "axios";
+import axios, {
+  AxiosRequestConfig,
+  AxiosRequestHeaders,
+  AxiosResponse,
+  Method,
+} from "axios";
+import { requestFail, responseFail } from "@/utilities/error-handler";
 import jsSHA from "jssha";
 
-// eslint-disable-next-line @typescript-eslint/no-namespace
-export namespace API {
-  export class handler {
-    config: AxiosRequestConfig;
+class handler {
+  config: AxiosRequestConfig;
 
-    constructor(url: string, method: Method) {
-      this.config = {
-        url: url,
-        method: method,
-        baseURL: "https://ptx.transportdata.tw/MOTC/v2/",
-        responseType: "json",
-        headers: this.GetAuthorizationHeader(),
-      };
-    }
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  constructor() {
+    this.config = {
+      baseURL: "https://ptx.transportdata.tw/MOTC/v2/",
+      responseType: "json",
+      headers: this.GetAuthorizationHeader(),
+    };
+  }
 
-    createAxios() {
-      const instance = axios.create();
+  async createAxios(url: string, method: Method): Promise<AxiosResponse> {
+    this.config.url = url;
+    this.config.method = method;
+    const instance = axios.create();
 
-      instance.interceptors.request.use(
-        (config) => {
-          // requestSuccess(config)
-        },
-        (err) => {
-          // requestFail(err);
-        }
-      );
-      instance.interceptors.response.use(
-        (response) => {
-          console.log(response);
-          // responseSuccess(response)
-        },
-        (err) => {
-          console.log(err);
-          // responseFail(error)
-        }
-      );
-
-      let result;
-
-      try {
-        result = instance.request(this.config);
-      } catch (error) {
-        console.log(error);
+    instance.interceptors.request.use(
+      (config) => {
+        return config;
+      },
+      (error) => {
+        requestFail(error);
       }
+    );
+    instance.interceptors.response.use(
+      (response) => {
+        return response;
+      },
+      (error) => {
+        responseFail(error);
+      }
+    );
 
-      //   axios({
-      //     method: "GET",
-      //     url: `${BASE_URL}/get`,
-      //     params: user,
-      //   })
-      //     .then((res: AxiosResponse) => {
-      //       console.log("res: ", res);
-      //       return res.data;
-      //     })
-      //     .then((data: User) => {
-      //       console.log("data: ", data);
-      //     })
-      //     .catch((err: any) => {
-      //       console.log("err: ", err);
-      //     });
-    }
+    let result;
 
-    GetAuthorizationHeader() {
-      const APPID = "2fb32863865346ed90d14cf06c85479a";
-      const APPKey = "cPT6MlWK5aRZjHzHqD7rrnGDj4U";
-      const GMTString = new Date().toUTCString();
-      const ShaObj = new jsSHA("SHA-1", "TEXT");
-
-      ShaObj.setHMACKey(APPKey, "TEXT");
-      ShaObj.update("x-date: " + GMTString);
-      const HMAC = ShaObj.getHMAC("B64");
-
-      const Authorization =
-        'hmac username="' +
-        APPID +
-        '", algorithm="hmac-sha1", headers="x-date", signature="' +
-        HMAC +
-        '"';
-
-      return { Authorization: Authorization, "X-Date": GMTString };
-    }
-
-    requestSuccess(config: AxiosRequestConfig) {
-      //
-    }
-    requestFail(error: any) {
-      console.log(error);
+    try {
+      result = await instance.request(this.config);
+      return Promise.resolve(result);
+    } catch (error) {
+      return Promise.reject(error);
     }
   }
+
+  GetAuthorizationHeader(): AxiosRequestHeaders {
+    const APPID = "2fb32863865346ed90d14cf06c85479a";
+    const APPKey = "cPT6MlWK5aRZjHzHqD7rrnGDj4U";
+    const GMTString = new Date().toUTCString();
+    const ShaObj = new jsSHA("SHA-1", "TEXT");
+
+    ShaObj.setHMACKey(APPKey, "TEXT");
+    ShaObj.update("x-date: " + GMTString);
+    const HMAC = ShaObj.getHMAC("B64");
+
+    const Authorization =
+      'hmac username="' +
+      APPID +
+      '", algorithm="hmac-sha1", headers="x-date", signature="' +
+      HMAC +
+      '"';
+
+    return { Authorization: Authorization, "X-Date": GMTString };
+  }
 }
+
+const APIhandler = new handler();
+
+export default APIhandler;

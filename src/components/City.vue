@@ -8,12 +8,14 @@
 </template>
 <script lang="ts">
 import { defineComponent, ref, watch, onMounted } from "vue";
+import { userPositionStore } from "@/store/index";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 
 export default defineComponent({
   components: {},
   setup() {
+    const store = userPositionStore();
     /* eslint-disable no-undef */
     let latitude = ref();
     let longitude = ref();
@@ -24,6 +26,8 @@ export default defineComponent({
     function success(position: GeolocationPosition): void {
       longitude.value = position.coords.longitude;
       latitude.value = position.coords.latitude;
+      store.longitude = position.coords.longitude;
+      store.latitude = position.coords.latitude;
     }
     function error(error: GeolocationPositionError): void {
       console.log("error:" + error.message);

@@ -27,16 +27,30 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent } from "vue";
-import { API } from "@/utilities/api-handler";
-
+import { defineComponent, onMounted, ref } from "vue";
+import { userPositionStore } from "@/store/index";
+// import Api from "@/api/youbike";
 export default defineComponent({
   components: {},
   setup() {
-    const handler = new API.handler("1", "get");
-    handler.createAxios();
-    // console.log(handler);
-    return {};
+    const store = userPositionStore();
+    const distance = ref("");
+    const meters = 500;
+    distance.value =
+      "&%24spatialFilter=nearby(" +
+      store.latitude +
+      "%2C%20" +
+      store.longitude +
+      "%2C%20" +
+      meters +
+      ")&%24";
+
+    onMounted(() => {
+      // Api.getYoubikeList("Taipei", distance.value).then((response) => {
+      //   console.log(response);
+      // });
+    });
+    return { store, distance };
   },
 });
 </script>
