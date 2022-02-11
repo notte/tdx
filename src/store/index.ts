@@ -5,11 +5,13 @@ export const cityStore = defineStore("city", {
     return {
       cn: "",
       en: "",
+      bikestatus: {},
     };
   },
   getters: {
     cnCity: (state) => state.cn,
     enCity: (state) => state.en,
+    youbikeStatus: (state) => state.bikestatus,
   },
   actions: {
     increment() {

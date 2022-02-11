@@ -26,16 +26,15 @@ export default defineComponent({
     Taiwan,
   },
   setup() {
-    const store = cityStore();
+    const city = cityStore();
     const map = ref();
     const local = ref();
     const router = useRouter();
-    let city = ref();
 
     const toCity = (): void => {
       router.push({
         name: "City",
-        params: { id: store.en },
+        params: { id: city.en },
       });
     };
 
@@ -48,9 +47,9 @@ export default defineComponent({
     });
 
     watch(
-      () => store.cn,
+      () => city.cn,
       () => {
-        local.value.innerHTML = store.cn;
+        local.value.innerHTML = city.cn;
       }
     );
 

@@ -11,12 +11,20 @@ export default {
   async getYoubikeList(
     city: string,
     distance: string
-  ): Promise<Model.IYoubikeListResponse> {
+  ): Promise<Model.IYoubikeListResponse[]> {
     const config: IRequestConfig = {
       url: "Bike/Station/" + city + "?" + distance,
       method: "get",
     };
     const result = await APIhandler.createAxios(config.url, config.method);
-    return <Model.IYoubikeListResponse>result.data;
+    return <Model.IYoubikeListResponse[]>result.data;
+  },
+  async getYoubikeStatus(city: string): Promise<Model.IYoubikeStatus[]> {
+    const config: IRequestConfig = {
+      url: "Bike/Availability/" + city,
+      method: "get",
+    };
+    const result = await APIhandler.createAxios(config.url, config.method);
+    return <Model.IYoubikeStatus[]>result.data;
   },
 };

@@ -1,5 +1,5 @@
 $white: #fcf9fc;
-$black: #616161;
+$black: #474747;
 $grey: #c2c2c2;
 
 .container {
@@ -177,7 +177,7 @@ $grey: #c2c2c2;
 
 }
 
-.youbike-list {
+.youbike {
     overflow-y: auto;
 
     .search {
@@ -193,41 +193,28 @@ $grey: #c2c2c2;
     }
 
     .item {
-        border-bottom: 1px $grey dashed;
+        border-bottom: 1px $grey solid;
+        color: $black;
         margin: 0 auto;
-        margin-bottom: 20px;
-        width: 95%;
-        
+        margin-bottom: -1px;
+        padding: 20px;
+        width: 100%;
+
+        .name {
+            // align-items: center;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .set {
+            h3 {
+                color: #ebaa39;
+            }
+        }
     }
 
     .item:last-child {
         border: 0;
-    }
-
-    h3.name {
-        color: #e8c17f;
-        display: block;
-    }
-
-    .set {
-        align-items: center;
-        display: inline-block;
-        padding: 10px 5px;
-    }
-
-
-    .set:last-child {
-        border: 0;
-    }
-
-
-    p {
-        color: $grey;
-    }
-
-    h3 {
-        color: $black;
-        font-weight: 900;
     }
 
 }
@@ -360,7 +347,7 @@ $grey: #c2c2c2;
 
 }
 
-#city {
+#map {
     border-radius: 5px;
     box-shadow: 0 3px 5px 0 #61616140;
     height: 60%;

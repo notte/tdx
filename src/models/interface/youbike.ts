@@ -11,6 +11,17 @@ export interface IYoubikeListResponse {
   UpdateTime: string;
 }
 
+export interface IYoubikeStatus {
+  StationUID: string;
+  StationID: string;
+  ServiceStatus: number;
+  ServiceType: number;
+  AvailableRentBikes: number;
+  AvailableReturnBikes: number;
+  SrcUpdateTime: string;
+  UpdateTime: string;
+}
+
 interface IStationAddres {
   Zh_tw: string;
   En: string;

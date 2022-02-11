@@ -4,12 +4,12 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: "/",
     name: "Home",
-    component: () => import("@/App.vue"),
+    redirect: { name: "Map" },
   },
   {
     path: "/map",
     name: "Map",
-    component: () => import("@/views/TaiwanView.vue"),
+    component: () => import("@/views/MapView.vue"),
   },
   {
     path: "/:id",

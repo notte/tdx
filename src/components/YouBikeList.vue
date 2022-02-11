@@ -1,56 +1,116 @@
 <template>
-  <div class="youbike-list">
+  <div class="youbike">
     <div class="search">
       <div class="search-item">
         <p>關鍵字</p>
-        <input type="search" />
+        <input v-model="word" type="search" />
       </div>
-      <button class="clear" @click="clear">清除</button>
-      <button>搜尋</button>
+      <button @click="search(word)">搜尋</button>
     </div>
-    <div class="item">
-      <h3 class="name">XXX Youbike 租借站</h3>
-      <p>251巷21號</p>
-      <div class="set">
-        <p>可租借車數</p>
-        <h3>10</h3>
+    <div class="list" v-if="word === ''">
+      <div class="item" v-for="item in youbikeList" :key="item.StationUID">
+        <div class="name">
+          <h4>{{ item.StationName.Zh_tw }}</h4>
+          <span>350 m</span>
+        </div>
+        <p>{{ item.StationAddress.Zh_tw }}</p>
+        <div class="set">
+          <p>可租借車數</p>
+          <h3>{{ item.AvailableRentBikes }}</h3>
+        </div>
+        <div class="set">
+          <p>可歸還車數</p>
+          <h3>{{ item.AvailableReturnBikes }}</h3>
+        </div>
       </div>
-      <div class="set">
-        <p>可歸還車數</p>
-        <h3>10</h3>
-      </div>
-      <div class="set">
-        <p>距離</p>
-        <h3>350 m</h3>
+    </div>
+    <div class="list" v-if="word !== ''">
+      <div class="item" v-for="item in searchList" :key="item.StationUID">
+        <div class="name">
+          <h4>{{ item.StationName.Zh_tw }}</h4>
+          <span>350 m</span>
+        </div>
+        <p>{{ item.StationAddress.Zh_tw }}</p>
+        <div class="set">
+          <p>可租借車數</p>
+          <h3>{{ item.AvailableRentBikes }}</h3>
+        </div>
+        <div class="set">
+          <p>可歸還車數</p>
+          <h3>{{ item.AvailableReturnBikes }}</h3>
+        </div>
       </div>
     </div>
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, onMounted, ref } from "vue";
-import { userPositionStore } from "@/store/index";
-// import Api from "@/api/youbike";
+import { defineComponent, watch, reactive, ref } from "vue";
+import { userPositionStore, cityStore } from "@/store/index";
+import * as Model from "@/models/interface/youbike";
+import EventBus from "@/utilities/event-bus";
+import Api from "@/api/youbike";
+
 export default defineComponent({
   components: {},
   setup() {
-    const store = userPositionStore();
-    const distance = ref("");
-    const meters = 500;
-    distance.value =
-      "&%24spatialFilter=nearby(" +
-      store.latitude +
-      "%2C%20" +
-      store.longitude +
-      "%2C%20" +
-      meters +
-      ")&%24";
+    const word = ref<string>("");
+    const position = userPositionStore();
+    const city = cityStore();
+    const distance = ref<string>("");
+    const meters = ref<number>(500);
+    const locationCity: string = city.$state.en
+      ? city.$state.en
+      : window.location.pathname.slice(1);
+    let youbikeList = reactive<Model.IYoubikeListResponse[]>([]);
+    let youbikeStatus = reactive<Model.IYoubikeStatus[]>([]);
 
-    onMounted(() => {
-      // Api.getYoubikeList("Taipei", distance.value).then((response) => {
-      //   console.log(response);
-      // });
-    });
-    return { store, distance };
+    Api.getYoubikeStatus(locationCity).then(
+      (response: Model.IYoubikeStatus[]) => {
+        youbikeStatus = Object.assign(youbikeStatus, response);
+      }
+    );
+
+    // PositionLat: 25.079322
+    // PositionLon: 121.568688
+
+    watch(
+      () => position.latitude,
+      () => {
+        distance.value =
+          "&%24spatialFilter=nearby(" +
+          position.latitude +
+          "%2C%20" +
+          position.longitude +
+          "%2C%20" +
+          meters.value +
+          ")&%24";
+
+        Api.getYoubikeList(locationCity, distance.value).then(
+          (response: Model.IYoubikeListResponse[]) => {
+            youbikeList = Object.assign(youbikeList, response);
+
+            for (let item of youbikeList) {
+              const status = getStatus(item.StationUID);
+              item = Object.assign(item, status);
+            }
+            EventBus.emit("send-place-list", youbikeList);
+          }
+        );
+      }
+    );
+
+    function getStatus(StationUID: string) {
+      for (const item of youbikeStatus) {
+        if (item.StationUID === StationUID) {
+          return {
+            AvailableRentBikes: item.AvailableRentBikes,
+            AvailableReturnBikes: item.AvailableReturnBikes,
+          };
+        }
+      }
+    }
+
+    return { position, word, city, distance, youbikeList, youbikeStatus };
   },
 });
 </script>
