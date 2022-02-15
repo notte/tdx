@@ -4,8 +4,8 @@
 <script lang="ts">
 import { defineComponent, ref, watch } from "vue";
 import { userPositionStore } from "@/store/index";
+import { IYoubikeListResponse } from "@/models/interface/youbike";
 import EventBus from "@/utilities/event-bus";
-import { setPoints } from "@/utilities/set-map";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 
@@ -24,22 +24,42 @@ export default defineComponent({
       iconSize: [40, 41],
       shadowSize: [41, 41],
       shadowAnchor: [12, 20],
+      bounceOnAdd: true,
+      bounceOnAddOptions: { duration: 1500, height: 200, loop: 10 },
     });
-    // const map = L.map("map");
+    let map: unknown;
     navigator.geolocation.getCurrentPosition(success, error, options);
 
     watch(latitude, () => {
-      const map = L.map("map").setView([latitude.value, longitude.value], 18);
+      map = L.map("map").setView([latitude.value, longitude.value], 16);
       L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png").addTo(
         map
       );
-      L.marker([latitude.value, longitude.value], {
+      const user = L.marker([latitude.value, longitude.value], {
         icon: greenIcon,
       }).addTo(map);
+
+      user.bindPopup("在這裡哦").openPopup();
+      // user.on("click", () => {
+      //   user.bounce({ duration: 500, height: 200, loop: 10 });
+      //   user.bindPopup("在這裡哦").openPopup();
+      // });
     });
 
+    // 接收定位點 Array，標註到畫面上
     EventBus.on("send-place-list", (data) => {
-      // setPoints(data, map, greenIcon);
+      for (const item of data as IYoubikeListResponse[]) {
+        const marker = L.marker(
+          [item.StationPosition.PositionLat, item.StationPosition.PositionLon],
+          {
+            icon: greenIcon,
+          }
+        ).addTo(map);
+        marker.bindPopup(item.StationName.Zh_tw);
+        marker.on("click", () => {
+          EventBus.emit("send-map-click-event", item);
+        });
+      }
     });
 
     function success(location: GeolocationPosition): void {

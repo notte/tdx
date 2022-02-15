@@ -1,17 +1,20 @@
 import { ref, onMounted, watch } from "vue";
-import * as Model from "@/models/interface/youbike";
-import L, { Map } from "leaflet";
+import L from "leaflet";
 import { Icon } from "leaflet";
+import * as Model from "@/models/interface/common";
 
-// 顯示多個定位點在地圖上
-export function setPoints<T>(placeList: T, map: T, icon: T): void {
-  console.log(placeList, map, icon);
-  //   for (const item of placeList) {
-  // L.marker(
-  //   [item.StationPosition.PositionLat, item.StationPosition.PositionLon],
-  //   {
-  //     icon: icon,
-  //   }
-  // ).addTo(map);
-  //   }
+export async function createPointList(
+  data: any[]
+): Promise<Model.IPointList[]> {
+  const newData = [];
+  for (const item of data) {
+    const newItem = {
+      name: item.StationName.Zh_tw,
+      latitude: item.StationPosition.PositionLat,
+      longitude: item.StationPosition.PositionLon,
+      StationUID: item.StationUID,
+    };
+    newData.push(newItem);
+  }
+  return newData;
 }

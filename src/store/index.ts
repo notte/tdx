@@ -5,20 +5,18 @@ export const cityStore = defineStore("city", {
     return {
       cn: "",
       en: "",
-      bikestatus: {},
     };
   },
   getters: {
     cnCity: (state) => state.cn,
     enCity: (state) => state.en,
-    youbikeStatus: (state) => state.bikestatus,
   },
-  actions: {
-    increment() {
-      console.log("increment");
-      return this;
-    },
-  },
+  // actions: {
+  //   increment() {
+  //     console.log("increment");
+  //     return this;
+  //   },
+  // },
 });
 
 export const userPositionStore = defineStore("user-position", {
@@ -32,10 +30,17 @@ export const userPositionStore = defineStore("user-position", {
     getLatitude: (state) => state.latitude,
     getLongitude: (state) => state.longitude,
   },
-  actions: {
-    increment() {
-      console.log("increment");
-      return this;
-    },
+});
+
+export const youbikeStore = defineStore("youbike", {
+  state: () => {
+    return {
+      bikestatus: {},
+      youbikelist: {},
+    };
+  },
+  getters: {
+    youbikeStatus: (state) => state.bikestatus,
+    youbikeList: (state) => state.youbikelist,
   },
 });

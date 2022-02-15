@@ -22,18 +22,18 @@ export interface IYoubikeStatus {
   UpdateTime: string;
 }
 
-interface IStationAddres {
+export interface IStationAddres {
   Zh_tw: string;
   En: string;
 }
 
-interface IStationPosition {
+export interface IStationPosition {
   PositionLon: number;
   PositionLat: number;
   GeoHash: string;
 }
 
-interface IStationName {
+export interface IStationName {
   Zh_tw: string;
   En: string;
 }

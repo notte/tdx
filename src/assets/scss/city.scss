@@ -193,15 +193,14 @@ $grey: #c2c2c2;
     }
 
     .item {
-        border-bottom: 1px $grey solid;
         color: $black;
+        cursor: pointer;
         margin: 0 auto;
         margin-bottom: -1px;
         padding: 20px;
         width: 100%;
 
         .name {
-            // align-items: center;
             display: flex;
             justify-content: space-between;
         }
@@ -215,6 +214,16 @@ $grey: #c2c2c2;
 
     .item:last-child {
         border: 0;
+    }
+
+    .active {
+        // border: 2px dashed #ebaa39;
+        background: #ebaa39;
+        color: $white;
+
+        .set h3 {
+            color: $white;
+        }
     }
 
 }
