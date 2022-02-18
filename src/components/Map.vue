@@ -8,7 +8,7 @@ import { IYoubikeListResponse } from "@/models/interface/youbike";
 import EventBus from "@/utilities/event-bus";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
-
+// import { AntPath, antPath } from "leaflet-ant-path";
 export default defineComponent({
   components: {},
   setup() {
@@ -17,6 +17,7 @@ export default defineComponent({
     let latitude = ref();
     let longitude = ref();
     let options = { enableHighAccuracy: true };
+
     const greenIcon = new L.Icon({
       iconUrl: "../icons/map.png",
       shadowUrl:
@@ -61,6 +62,15 @@ export default defineComponent({
         });
       }
     });
+
+    // const latlngs = [
+    //   [47.45839225859763, 31.201171875],
+    //   [48.40003249610685, 28.564453125000004],
+    // ];
+    // const option = { color: "red", weight: 5 };
+    // const antPolyline = new L.Polyline.AntPath(latlngs, option);
+
+    // antPolyline.addTo(map);
 
     function success(location: GeolocationPosition): void {
       longitude.value = location.coords.longitude;

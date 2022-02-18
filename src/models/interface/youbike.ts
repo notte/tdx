@@ -9,6 +9,9 @@ export interface IYoubikeListResponse {
   ServiceType: number;
   SrcUpdateTime: string;
   UpdateTime: string;
+  AvailableRentBikes?: number;
+  AvailableReturnBikes?: number;
+  distance?: number;
 }
 
 export interface IYoubikeStatus {

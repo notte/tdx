@@ -16,7 +16,7 @@
       >
         <div class="name">
           <h4>{{ item.StationName.Zh_tw }}</h4>
-          <span>350 m</span>
+          <span>{{ item.distance }} m</span>
         </div>
         <p>{{ item.StationAddress.Zh_tw }}</p>
         <div class="set">
@@ -54,6 +54,8 @@ import { userPositionStore, cityStore } from "@/store/index";
 import * as Model from "@/models/interface/youbike";
 import EventBus from "@/utilities/event-bus";
 import Api from "@/api/youbike";
+import L from "leaflet";
+import { GeodesicLine } from "leaflet.geodesic";
 
 export default defineComponent({
   components: {},
@@ -62,7 +64,6 @@ export default defineComponent({
     const city = cityStore();
 
     const getListDOM = ref();
-    // const searchList = ref<null | HTMLElement>();
 
     const word = ref<string>("");
     const distance = ref<string>("");
@@ -95,15 +96,34 @@ export default defineComponent({
         Api.getYoubikeList(locationCity, distance.value).then(
           (response: Model.IYoubikeListResponse[]) => {
             youbikeList = Object.assign(youbikeList, response);
-
-            for (let item of youbikeList) {
-              const status = getStatus(item.StationUID);
-              item = Object.assign(item, status);
-            }
-            console.log(youbikeList);
-            EventBus.emit("send-place-list", youbikeList);
           }
         );
+      }
+    );
+    watch(
+      () => youbikeList.length,
+      () => {
+        console.log(youbikeList);
+        const UserPosition = new L.LatLng(
+          position.latitude,
+          position.longitude
+        );
+        for (let item of youbikeList) {
+          const BikeStation = new L.LatLng(
+            item.StationPosition.PositionLat,
+            item.StationPosition.PositionLon
+          );
+          const line = new GeodesicLine();
+          const distance = line.distance(UserPosition, BikeStation);
+          const status = getStatus(item.StationUID);
+          item = Object.assign(item, status, {
+            distance: Math.floor(distance),
+          });
+        }
+        youbikeList.sort((a, b) => {
+          return Number(a.distance) - Number(b.distance);
+        });
+        EventBus.emit("send-place-list", youbikeList);
       }
     );
 
@@ -126,7 +146,6 @@ export default defineComponent({
         }
       }
     }
-
     function getStatus(StationUID: string) {
       for (const item of youbikeStatus) {
         if (item.StationUID === StationUID) {
