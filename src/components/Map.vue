@@ -48,7 +48,7 @@ export default defineComponent({
     });
 
     // 接收定位點 Array，標註到畫面上
-    EventBus.on("send-place-list", (data) => {
+    EventBus.on("get-bike-list", (data) => {
       for (const item of data as IYoubikeListResponse[]) {
         const marker = L.marker(
           [item.StationPosition.PositionLat, item.StationPosition.PositionLon],
@@ -58,7 +58,7 @@ export default defineComponent({
         ).addTo(map);
         marker.bindPopup(item.StationName.Zh_tw);
         marker.on("click", () => {
-          EventBus.emit("send-map-click-event", item);
+          EventBus.emit("map-click-event", item.StationUID);
         });
       }
     });

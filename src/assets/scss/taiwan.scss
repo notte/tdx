@@ -15,15 +15,18 @@ $grey: #c2c2c2;
     path {
         cursor: pointer;
         fill: transparent;
-        stroke: #eed8b3;
+        stroke: #acacac;
         stroke-linecap: round;
         stroke-linejoin: round;
         stroke-width: 2px;
 
         &:hover,
         &.active {
-            fill: rgba(#eed8b3, 1);
-            stroke: transparent;
+            fill: rgba(#acacac, 0.6);
+            stroke: rgba(#acacac, 0.6);
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            stroke-width: 2px;
         }
         
     }
@@ -52,7 +55,7 @@ $grey: #c2c2c2;
         }
 
         button {
-            background-color: #e8c17f;
+            background-color: #71bac4;
             border: 0;
             border-radius: 5px;
             color: $white;
@@ -63,7 +66,7 @@ $grey: #c2c2c2;
         }
 
         button:hover {
-            background-color: #fce2b5;
+            background-color: #7ad7e4;
         }
     }
 }

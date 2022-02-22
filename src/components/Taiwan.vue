@@ -8,7 +8,7 @@ import * as d3 from "d3";
 export default defineComponent({
   setup() {
     const city = cityStore();
-    EventBus.on("send-map-size", (data) => {
+    EventBus.on("get-map-size", (data) => {
       let width = (data as Model.IMapSize).width;
       let height = (data as Model.IMapSize).height;
 

@@ -9,7 +9,6 @@
     "selector-class-pattern":"[a-z]",
     "indentation": 4,
     "max-nesting-depth":3
-
   },
   "ignoreFiles": [
     "./node_modules/**/*.{css,scss,sass}",

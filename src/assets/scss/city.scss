@@ -179,6 +179,7 @@ $grey: #c2c2c2;
 
 .youbike {
     overflow-y: auto;
+    scroll-behavior: smooth;
 
     .search {
         border-bottom: 0;

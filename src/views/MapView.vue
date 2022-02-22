@@ -43,7 +43,7 @@ export default defineComponent({
         width: map.value.offsetWidth,
         height: map.value.offsetHeight,
       };
-      EventBus.emit("send-map-size", data);
+      EventBus.emit("get-map-size", data);
     });
 
     watch(

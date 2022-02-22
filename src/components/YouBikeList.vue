@@ -1,5 +1,5 @@
 <template>
-  <div class="youbike">
+  <div class="youbike" ref="scrollDOM">
     <div class="search">
       <div class="search-item">
         <p>關鍵字</p>
@@ -64,6 +64,7 @@ export default defineComponent({
     const city = cityStore();
 
     const getListDOM = ref();
+    const scrollDOM = ref();
 
     const word = ref<string>("");
     const distance = ref<string>("");
@@ -103,7 +104,6 @@ export default defineComponent({
     watch(
       () => youbikeList.length,
       () => {
-        console.log(youbikeList);
         const UserPosition = new L.LatLng(
           position.latitude,
           position.longitude
@@ -123,13 +123,13 @@ export default defineComponent({
         youbikeList.sort((a, b) => {
           return Number(a.distance) - Number(b.distance);
         });
-        EventBus.emit("send-place-list", youbikeList);
+        EventBus.emit("get-bike-list", youbikeList);
       }
     );
 
     onMounted(() => {
-      EventBus.on("send-map-click-event", (data) => {
-        getClickedBike(data as string);
+      EventBus.on("map-click-event", (StationUID) => {
+        getClickedBike(StationUID as string);
       });
     });
 
@@ -141,8 +141,8 @@ export default defineComponent({
         }
         if (item.classList[0] === data) {
           item.classList.value = data + " item active";
-          // getListDOM.value.offsetTop = item.offsetTop;
-          // console.log(item.offsetTop);
+          scrollDOM.value.scrollTop = item.offsetTop - 172;
+          console.log(item.offsetTop);
         }
       }
     }
@@ -170,6 +170,7 @@ export default defineComponent({
       getListDOM,
       getClickedBike,
       scrollBehavior,
+      scrollDOM,
       // searchList,
     };
   },
