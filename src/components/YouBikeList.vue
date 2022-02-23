@@ -1,39 +1,21 @@
 <template>
   <div class="youbike" ref="scrollDOM">
-    <div class="search">
-      <div class="search-item">
-        <p>關鍵字</p>
-        <input v-model="word" type="search" />
-      </div>
-      <button @click="search(word)">搜尋</button>
-    </div>
-    <div class="list" v-if="word === ''" ref="getListDOM">
+    <div class="list" ref="getListDOM">
       <div
         :class="item.StationUID + ' ' + 'item'"
         v-for="item in youbikeList"
         :key="item.StationUID"
-        @click="getClickedBike(item.StationUID)"
+        @click="
+          getClickedBike(
+            item.StationUID,
+            item.StationPosition.PositionLat,
+            item.StationName.PositionLon
+          )
+        "
       >
         <div class="name">
           <h4>{{ item.StationName.Zh_tw }}</h4>
           <span>{{ item.distance }} m</span>
-        </div>
-        <p>{{ item.StationAddress.Zh_tw }}</p>
-        <div class="set">
-          <p>可租借車數</p>
-          <h3>{{ item.AvailableRentBikes }}</h3>
-        </div>
-        <div class="set">
-          <p>可歸還車數</p>
-          <h3>{{ item.AvailableReturnBikes }}</h3>
-        </div>
-      </div>
-    </div>
-    <div class="list" v-if="word !== ''">
-      <div class="item" v-for="item in searchList" :key="item.StationUID">
-        <div class="name">
-          <h4>{{ item.StationName.Zh_tw }}</h4>
-          <span>350 m</span>
         </div>
         <p>{{ item.StationAddress.Zh_tw }}</p>
         <div class="set">
@@ -56,6 +38,7 @@ import EventBus from "@/utilities/event-bus";
 import Api from "@/api/youbike";
 import L from "leaflet";
 import { GeodesicLine } from "leaflet.geodesic";
+import "@/assets/scss/youbike.scss";
 
 export default defineComponent({
   components: {},
@@ -66,7 +49,7 @@ export default defineComponent({
     const getListDOM = ref();
     const scrollDOM = ref();
 
-    const word = ref<string>("");
+    // const word = ref<string>("");
     const distance = ref<string>("");
     const meters = ref<number>(500);
     const locationCity: string = city.$state.en
@@ -128,23 +111,30 @@ export default defineComponent({
     );
 
     onMounted(() => {
-      EventBus.on("map-click-event", (StationUID) => {
-        getClickedBike(StationUID as string);
+      EventBus.on("map-click-event", (data: any) => {
+        getClickedBike(data.StationUID, data.latitude, data.longitude);
       });
     });
 
-    function getClickedBike(data: string) {
+    function getClickedBike(
+      data: string,
+      latitude?: number,
+      longitude?: number
+    ) {
       for (const item of getListDOM.value?.children) {
         const index = item.classList.value.lastIndexOf("active");
         if (index !== -1) {
           item.classList.value = item.classList.value.replace("active", "");
         }
         if (item.classList[0] === data) {
+          console.log(item);
           item.classList.value = data + " item active";
           scrollDOM.value.scrollTop = item.offsetTop - 172;
           console.log(item.offsetTop);
         }
       }
+
+      // EventBus.emit("bike-click-event", [it]);
     }
     function getStatus(StationUID: string) {
       for (const item of youbikeStatus) {
@@ -162,7 +152,7 @@ export default defineComponent({
 
     return {
       position,
-      word,
+      // word,
       city,
       distance,
       youbikeList,
@@ -171,7 +161,6 @@ export default defineComponent({
       getClickedBike,
       scrollBehavior,
       scrollDOM,
-      // searchList,
     };
   },
 });

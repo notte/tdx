@@ -12,12 +12,11 @@
           @click="clickTab(YoubikeList)"
           :class="Current === YoubikeList ? 'active' : ''"
         >
-          周邊 Youbike 列表
+          Youbike 列表
         </button>
       </div>
       <YoubikeList class="tab-content" v-if="isShow(YoubikeList)" />
       <BikeRoute class="tab-content" v-if="isShow(BikeRoute)" />
-      <RouteContent class="tab-content" v-if="isShow(RouteContent)" />
     </div>
   </div>
 </template>
@@ -25,7 +24,6 @@
 import { defineComponent, ref } from "vue";
 import Map from "@/components/Map.vue";
 import BikeRoute from "@/components/BikeRoute.vue";
-import RouteContent from "@/components/RouteContent.vue";
 import YoubikeList from "@/components/YoubikeList.vue";
 import * as Status from "@/models/status/type";
 import "@/assets/scss/city.scss";
@@ -34,14 +32,12 @@ export default defineComponent({
   components: {
     Map,
     YoubikeList,
-    RouteContent,
     BikeRoute,
   },
   setup() {
     const Current = ref(Status.TabType.YoubikeList);
     const YoubikeList = ref(Status.TabType.YoubikeList);
     const BikeRoute = ref(Status.TabType.BikeRoute);
-    const RouteContent = ref(Status.TabType.RouteContent);
 
     function isShow(page: Status.TabType): boolean {
       return Current.value === page ? true : false;
@@ -53,7 +49,6 @@ export default defineComponent({
       Current,
       YoubikeList,
       BikeRoute,
-      RouteContent,
       isShow,
       clickTab,
     };

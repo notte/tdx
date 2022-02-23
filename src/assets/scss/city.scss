@@ -52,336 +52,12 @@ $grey: #c2c2c2;
 
 }
 
-.search {
-    border-bottom: 1px $grey dashed;
-    margin: 0 auto;
-
-    .search-item {
-        display: inline-block;
-        text-align: center;
-        width: 50%;
-
-        p {
-            left: 5px;
-            position: relative;
-            text-align: left;
-        }
-    }
-
-    p {
-        color: $black;
-        font-size: 13px;
-    }
-
-    input,
-    select {
-        border: 1px $black solid;
-        border-radius: 3px;
-        color: $black;
-        font-size: 14px;
-        height: 30px;
-        padding: 0 5px;
-        width: 95%;
-    }
-
-    button {
-        background-color: #e8c17f;
-        border: 0;
-        border-radius: 5px;
-        color: $white;
-        cursor: pointer;
-        font-size: 14px;
-        margin: 10px 10px 20px 0;
-        padding: 5px 10px;
-    }
-
-    button:hover {
-        background-color: #fce2b5;
-    }
-    
-    button.clear {
-        background-color: #be3c33;
-    }
-
-    button.clear:hover {
-        background-color: #e65349;
-    }
-}
-
-.bike-route {
-    .search {
-        button {
-            padding: 5px 40px;
-        }
-
-        .search-item:last-child {
-            position: relative;
-            right: -5px;
-            text-align: center;
-            width: 100%;
-        }
-    }
-
-    .list {
-        overflow-y: auto;
-    
-        .item {
-            margin: 5% 10%;
-        }
-    
-        .item:last-child {
-            border-bottom: 0;
-            padding-bottom: 0;
-        }
-    
-        .tag {
-            margin: 10px 0;
-        }
-    
-        p {
-            color: $black;
-        }
-    
-        h2 {
-            color: $black;
-            margin: 10px 0;
-        }
-    
-        .img {
-            width: 100%;
-    
-            img {
-                width: 100%;
-            }
-        }
-    
-        button {
-            background-color: transparent;
-            border: 2px #e8c17f solid;
-            border-radius: 5px;
-            color: #e8c17f;
-            cursor: pointer;
-            font-size: 15px;
-            font-weight: 900;
-            padding: 10px 0;
-            width: 100%;
-        }
-    
-        button:hover {
-            background-color: #fce2b5;
-            border: 2px #fce2b5 solid;
-            color: $white;
-        }
-    }
-    
-
-}
-
-.youbike {
-    overflow-y: auto;
-    scroll-behavior: smooth;
-
-    .search {
-        border-bottom: 0;
-
-        .search-item {
-            display: inline-block;
-        }
-
-        button:nth-child(2) {
-            margin-left: 5px;
-        }
-    }
-
-    .item {
-        color: $black;
-        cursor: pointer;
-        margin: 0 auto;
-        margin-bottom: -1px;
-        padding: 20px;
-        width: 100%;
-
-        .name {
-            display: flex;
-            justify-content: space-between;
-        }
-
-        .set {
-            h3 {
-                color: #ebaa39;
-            }
-        }
-    }
-
-    .item:last-child {
-        border: 0;
-    }
-
-    .active {
-        // border: 2px dashed #ebaa39;
-        background: #ebaa39;
-        color: $white;
-
-        .set h3 {
-            color: $white;
-        }
-    }
-
-}
-
-.route-item {
-    .block {
-        margin: 30px;
-    }
-
-    h2,
-    h3 {
-        color: $black;
-    }
-
-    p {
-        color: $black;
-    }
-
-    .base {
-        align-items: center;
-        display: flex;
-
-        .img {
-            flex: 2;
-    
-            img {
-                height: auto;
-                width: 100%;
-            }
-        }
-    
-        .tag {
-            flex: 1;
-            margin: 10px;
-
-            p {
-                color: $black;
-                font-size: 13px;
-            }
-        }
-    }
-
-    .weather {
-        display: flex;
-        margin-top: 10px;
-        overflow-x: auto;
-
-        .item {
-            flex: 1;
-            min-width: 100px;
-        }
-
-        .img {
-            background-color: #ccc;
-            height: 80px;
-            overflow: hidden;
-            width: 100%;
-        }
-
-        p {
-            color: $black;
-            font-weight: 900;
-            text-align: center;
-        }
-
-        img {
-            height: 100%;
-            width: 100%;
-        }
-    }
-
-    .weather::-webkit-scrollbar {
-        display: none;
-    }
-
-    .select {
-        select {
-            border: 1px $black solid;
-            border-radius: 3px;
-            color: $black;
-            font-size: 14px;
-            height: 30px;
-            padding: 0 5px;
-            width: 30%;
-        }
-    }
-
-    .describe {
-        border-bottom: 1px #e8c17f dashed;
-        border-top: 1px #e8c17f dashed;
-        color: #d8a03f;
-        font-size: 14px;
-        padding: 20px 0;
-    }
-}
-
-.edit-route {
-    .point {
-        align-items: center;
-        border: 2px $black solid;
-        border-radius: 5px;
-        display: flex;
-        margin-top: 10px;
-        padding: 5px 10px;
-        position: relative;
-        width: 50%;
-
-        span {
-            color: $black;
-            margin-right: 5px;
-        }
-
-        p {
-            display: inline-block;
-        }
-
-        button {
-            background-color: transparent;
-            border: 0;
-            border-radius: 5px;
-            color: $black;
-            cursor: pointer;
-            font-size: 14px;
-            font-weight: 900;
-            padding: 3px 5px;
-            position: absolute;
-            right: 5px;
-        }
-    }
-
-}
-
 #map {
     border-radius: 5px;
     box-shadow: 0 3px 5px 0 #61616140;
     height: 60%;
     width: 90%;
     z-index: 0;
-    // .switch {
-    //     left: 15px;
-    //     position: fixed;
-    //     top: 15px;
-
-    //     button {
-    //         background-color: #e8c17f;
-    //         border: 0;
-    //         border-radius: 5px;
-    //         color: $white;
-    //         cursor: pointer;
-    //         font-size: 18px;
-    //         padding: 7px 10px;
-    //     }
-
-    //     button:first-child {
-    //         margin-right: 10px;
-    //     }
-    // }
 }
 
 @media screen and (max-width: 480px) {
@@ -396,9 +72,11 @@ $grey: #c2c2c2;
 
         .tab-container { 
             flex: 1;
-            // height: 50%;
-            // transform: translate(-1%, -2%);
-            // width: 96%;
+
+            .tab-content {
+                padding: 0;
+                padding-top: 10px;
+            }
         }
 
         .item {
@@ -414,7 +92,13 @@ $grey: #c2c2c2;
                 }
             }
         }
+
+        
     
     
+    }
+
+    #map {
+        height: 90%;
     }
 }

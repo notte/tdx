@@ -8,7 +8,7 @@ import { IYoubikeListResponse } from "@/models/interface/youbike";
 import EventBus from "@/utilities/event-bus";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
-// import { AntPath, antPath } from "leaflet-ant-path";
+
 export default defineComponent({
   components: {},
   setup() {
@@ -28,11 +28,22 @@ export default defineComponent({
       bounceOnAdd: true,
       bounceOnAddOptions: { duration: 1500, height: 200, loop: 10 },
     });
-    let map: unknown;
+    const bicycleIcon = new L.Icon({
+      iconUrl: "../icons/bicycle.png",
+      shadowUrl:
+        "https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png",
+      iconSize: [40, 41],
+      shadowSize: [41, 41],
+      shadowAnchor: [12, 20],
+      bounceOnAdd: true,
+      bounceOnAddOptions: { duration: 1500, height: 200, loop: 10 },
+    });
+    let map: unknown | MapConstructor;
     navigator.geolocation.getCurrentPosition(success, error, options);
 
     watch(latitude, () => {
       map = L.map("map").setView([latitude.value, longitude.value], 16);
+      console.log(map);
       L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png").addTo(
         map
       );
@@ -40,11 +51,10 @@ export default defineComponent({
         icon: greenIcon,
       }).addTo(map);
 
-      user.bindPopup("在這裡哦").openPopup();
-      // user.on("click", () => {
-      //   user.bounce({ duration: 500, height: 200, loop: 10 });
-      //   user.bindPopup("在這裡哦").openPopup();
-      // });
+      user.bindPopup("user");
+      user.on("click", () => {
+        (map as any).panTo([latitude.value, longitude.value]);
+      });
     });
 
     // 接收定位點 Array，標註到畫面上
@@ -53,24 +63,28 @@ export default defineComponent({
         const marker = L.marker(
           [item.StationPosition.PositionLat, item.StationPosition.PositionLon],
           {
-            icon: greenIcon,
+            icon: bicycleIcon,
           }
         ).addTo(map);
+
         marker.bindPopup(item.StationName.Zh_tw);
         marker.on("click", () => {
-          EventBus.emit("map-click-event", item.StationUID);
+          EventBus.emit("map-click-event", {
+            StationUID: item.StationUID,
+            latitude: item.StationPosition.PositionLat,
+            longitude: item.StationPosition.PositionLon,
+          });
+          console.log(item.StationPosition.PositionLat);
+          (map as any).panTo([
+            item.StationPosition.PositionLat,
+            item.StationPosition.PositionLon,
+          ]);
         });
       }
     });
-
-    // const latlngs = [
-    //   [47.45839225859763, 31.201171875],
-    //   [48.40003249610685, 28.564453125000004],
-    // ];
-    // const option = { color: "red", weight: 5 };
-    // const antPolyline = new L.Polyline.AntPath(latlngs, option);
-
-    // antPolyline.addTo(map);
+    EventBus.on("bike-click-event", (StationUID) => {
+      console.log(StationUID);
+    });
 
     function success(location: GeolocationPosition): void {
       longitude.value = location.coords.longitude;

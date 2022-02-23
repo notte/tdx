@@ -1,0 +1,42 @@
+$white: #fcf9fc;
+$black: #474747;
+$grey: #c2c2c2;
+
+.youbike {
+    overflow-y: auto;
+    scroll-behavior: smooth;
+
+    .item {
+        color: $black;
+        cursor: pointer;
+        margin: 0 auto;
+        margin-bottom: -1px;
+        padding: 20px;
+        width: 100%;
+
+        .name {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .set {
+            h3 {
+                color: #467599;
+            }
+        }
+    }
+
+    .item:last-child {
+        border: 0;
+    }
+
+    .active {
+        background: #467599;
+        color: $white;
+
+        .set h3 {
+            color: $white;
+        }
+    }
+
+}
