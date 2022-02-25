@@ -14,6 +14,12 @@ export interface IYoubikeListResponse {
   distance?: number;
 }
 
+export interface IGetClickedBike {
+  StationUID: string;
+  latitude: number;
+  longitude: number;
+}
+
 export interface IYoubikeStatus {
   StationUID: string;
   StationID: string;

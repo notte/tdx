@@ -1,5 +1,9 @@
 <template>
   <div class="youbike" ref="scrollDOM">
+    <!-- <div
+      style="background: #000; width: 100px; height: 100px"
+      ref="demoDOM"
+    ></div> -->
     <div class="list" ref="getListDOM">
       <div
         :class="item.StationUID + ' ' + 'item'"
@@ -9,7 +13,7 @@
           getClickedBike(
             item.StationUID,
             item.StationPosition.PositionLat,
-            item.StationName.PositionLon
+            item.StationPosition.PositionLon
           )
         "
       >
@@ -48,6 +52,7 @@ export default defineComponent({
 
     const getListDOM = ref();
     const scrollDOM = ref();
+    const demoDOM = ref();
 
     // const word = ref<string>("");
     const distance = ref<string>("");
@@ -111,30 +116,32 @@ export default defineComponent({
     );
 
     onMounted(() => {
-      EventBus.on("map-click-event", (data: any) => {
-        getClickedBike(data.StationUID, data.latitude, data.longitude);
+      EventBus.on("map-click-event", (data) => {
+        getClickedBike(
+          (data as Model.IGetClickedBike).StationUID,
+          (data as Model.IGetClickedBike).latitude,
+          (data as Model.IGetClickedBike).longitude
+        );
       });
     });
 
-    function getClickedBike(
-      data: string,
-      latitude?: number,
-      longitude?: number
-    ) {
-      for (const item of getListDOM.value?.children) {
-        const index = item.classList.value.lastIndexOf("active");
-        if (index !== -1) {
-          item.classList.value = item.classList.value.replace("active", "");
-        }
-        if (item.classList[0] === data) {
-          console.log(item);
-          item.classList.value = data + " item active";
-          scrollDOM.value.scrollTop = item.offsetTop - 172;
-          console.log(item.offsetTop);
-        }
+    function getClickedBike(id: string, latitude: number, longitude: number) {
+      const Array = getListDOM.value.children;
+      for (let index = 0; index < Array.length; index++) {
+        console.log(Array[index].classList);
       }
-
-      // EventBus.emit("bike-click-event", [it]);
+      // for (const item of getListDOM.value?.children) {
+      //   const index = item.classList.value.lastIndexOf("active");
+      //   if (index !== -1) {
+      //     item.classList.value = item.classList.value.replace("active", "");
+      //   }
+      //   if (item.classList[0] === id) {
+      //     item.classList.value = id + " item active";
+      //     scrollDOM.value.scrollTop = 182;
+      //     console.log(getListDOM.value.scrollTop, scrollDOM.value.scrollTop);
+      //   }
+      // }
+      // EventBus.emit("bike-click-event", [latitude, longitude, id]);
     }
     function getStatus(StationUID: string) {
       for (const item of youbikeStatus) {
@@ -161,6 +168,7 @@ export default defineComponent({
       getClickedBike,
       scrollBehavior,
       scrollDOM,
+      demoDOM,
     };
   },
 });
