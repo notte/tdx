@@ -25,6 +25,7 @@ import { defineComponent, ref } from "vue";
 import Map from "@/components/Map.vue";
 import BikeRoute from "@/components/BikeRoute.vue";
 import YoubikeList from "@/components/YoubikeList.vue";
+import EventBus from "@/utilities/event-bus";
 import * as Status from "@/models/status/type";
 import "@/assets/scss/city.scss";
 
@@ -44,6 +45,7 @@ export default defineComponent({
     }
     function clickTab(page: Status.TabType) {
       Current.value = page;
+      EventBus.emit("click-tab");
     }
     return {
       Current,
