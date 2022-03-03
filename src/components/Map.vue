@@ -2,8 +2,7 @@
   <div id="map"></div>
 </template>
 <script lang="ts">
-import { defineComponent, ref, watch } from "vue";
-import { userPositionStore } from "@/store/index";
+import { defineComponent, onMounted, ref } from "vue";
 import EventBus from "@/utilities/event-bus";
 import { IPointList } from "@/models/interface/common";
 import * as map_handler from "@/utilities/map-handler";
@@ -13,12 +12,8 @@ import "leaflet/dist/leaflet.css";
 export default defineComponent({
   components: {},
   setup() {
-    // pinia 儲存的使用者定位位置
-    const position = userPositionStore();
-
-    let latitude = ref();
-    let longitude = ref();
-    let options = { enableHighAccuracy: true };
+    const latitude = Number(localStorage.getItem("latitude"));
+    const longitude = Number(localStorage.getItem("longitude"));
     let map: L.Map;
 
     // 記錄目前地圖上的所有標註點資料（從別的組件傳過來的資料）
@@ -26,24 +21,24 @@ export default defineComponent({
     // 記錄目前地圖上的所有標註點（指地圖上使用的標註點本身，例如用哪個 icon 等等）
     let markers = ref<L.Marker[]>([]);
 
-    // console.log(pointList.value === undefined, markers.value);
+    const user: L.Marker = L.marker([latitude, longitude], {
+      icon: map_handler.userIcon,
+    });
+    user.bindPopup("user");
+    user.on("click", () => {
+      map.panTo([latitude, longitude]);
+    });
+
     // 監聽獲取到位置經緯度，以使用者為中心渲染出地圖，並標註使用者位置
-    watch(latitude, () => {
-      /*
+
+    /*
       這裡的邏輯要變，如果無法取得定位點資訊
       就直接給予一個經緯度（面試時可能會用到）
       變數名稱改為地圖中心點 center
       */
-      map_handler.renderMap(latitude.value, longitude.value).then((res) => {
+    onMounted(() => {
+      map_handler.renderMap(latitude, longitude).then((res) => {
         map = res;
-        const user: L.Marker = L.marker([latitude.value, longitude.value], {
-          icon: map_handler.userIcon,
-        });
-        user.bindPopup("user");
-        user.on("click", () => {
-          map.panTo([latitude.value, longitude.value]);
-        });
-
         user.addTo(map);
       });
     });
@@ -101,26 +96,9 @@ export default defineComponent({
       }
     });
 
-    // 取得 user 定位，賦值在兩個變數 longitude、longitude，以及 pinia
-    navigator.geolocation.getCurrentPosition(success, error, options);
-    function success(location) {
-      longitude.value = location.coords.longitude;
-      latitude.value = location.coords.latitude;
-      position.longitude = location.coords.longitude;
-      position.latitude = location.coords.latitude;
-    }
-    function error(error) {
-      console.log("error:" + error.message);
-    }
-
     return {
-      success,
-      error,
-      options,
       latitude,
       longitude,
-      position,
-      // createMarkers,
     };
   },
 });
