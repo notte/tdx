@@ -5,4 +5,4 @@ declare module '*.vue' {
   export default component
 }
 
-declare module "leaflet";
+// declare module "leaflet";

@@ -34,6 +34,7 @@
 import { defineComponent, watch, reactive, ref } from "vue";
 import { userPositionStore, cityStore } from "@/store/index";
 import * as Model from "@/models/interface/youbike";
+import { IPointList } from "@/models/interface/common";
 import EventBus from "@/utilities/event-bus";
 import Api from "@/api/youbike";
 import L from "leaflet";
@@ -67,32 +68,13 @@ export default defineComponent({
     let youbikeStatus = reactive<Model.IYoubikeStatus[]>([]);
 
     // 先帶入縣市參數，取得所有站點狀態（車位之類的）
-    Api.getYoubikeStatus(locationCity).then(
-      (response: Model.IYoubikeStatus[]) => {
-        youbikeStatus = Object.assign(youbikeStatus, response);
-      }
-    );
+    getYoubikeStatusAPI();
 
     // 確定可以獲取到使用者經緯度後
     watch(
       () => position.latitude,
       () => {
-        // 建立 url 距離參數
-        distance.value =
-          "&%24spatialFilter=nearby(" +
-          position.latitude +
-          "%2C%20" +
-          position.longitude +
-          "%2C%20" +
-          meters.value +
-          ")&%24";
-
-        // 帶入後呼叫 API，取得範圍內 youbike
-        Api.getYoubikeList(locationCity, distance.value).then(
-          (response: Model.IYoubikeListResponse[]) => {
-            youbikeList = Object.assign(youbikeList, response);
-          }
-        );
+        getYoubikeListAPI();
       }
     );
 
@@ -100,40 +82,7 @@ export default defineComponent({
     watch(
       () => youbikeList.length,
       () => {
-        // user 位置
-        const UserPosition = new L.LatLng(
-          position.latitude,
-          position.longitude
-        );
-
-        // 迭代所有 youbike 站點
-        for (let item of youbikeList) {
-          // 每一個 youbike 站點位置
-          const BikeStation = new L.LatLng(
-            item.StationPosition.PositionLat,
-            item.StationPosition.PositionLon
-          );
-
-          // 計算兩者之間的距離
-          const line = new GeodesicLine();
-          const distance = line.distance(UserPosition, BikeStation);
-
-          // 取得站點狀態
-          const status = getStatus(item.StationUID);
-
-          // 加入到物件中
-          item = Object.assign(item, status, {
-            distance: Math.floor(distance),
-          });
-        }
-
-        // 依照距離排序
-        youbikeList.sort((a, b) => {
-          return Number(a.distance) - Number(b.distance);
-        });
-
-        // 發送取得 youbike 事件，並帶入資料
-        EventBus.emit("get-bike-list", youbikeList);
+        renderYoubikeList();
       }
     );
 
@@ -146,6 +95,15 @@ export default defineComponent({
         (data as Model.IGetClickedBike).longitude
       );
     });
+
+    /* 
+    youbike tab 被點擊事件 
+    */
+    EventBus.on("click-youbike-tab", () => {
+      renderYoubikeList();
+      // console.log(position.latitude, position.longitude);
+    });
+
     // 站點被點擊事件，接收被點擊 id、經緯度
     function getClickedBike(id: string, latitude: number, longitude: number) {
       // 取得 DOM 中被渲染的 youbike 列表
@@ -174,7 +132,6 @@ export default defineComponent({
       // 發送右側列表被點擊事件給 map
       EventBus.emit("bike-click-event", [latitude, longitude, id]);
     }
-
     // 取得站點狀態
     function getStatus(StationUID: string) {
       // 迭代所有站點
@@ -188,6 +145,71 @@ export default defineComponent({
           };
         }
       }
+    }
+    function renderYoubikeList(): void {
+      // user 位置
+      const UserPosition = new L.LatLng(position.latitude, position.longitude);
+
+      const newArray: IPointList[] = [];
+
+      // 迭代所有 youbike 站點
+      for (let item of youbikeList) {
+        newArray.push({
+          StationUID: item.StationUID,
+          latitude: item.StationPosition.PositionLat,
+          longitude: item.StationPosition.PositionLon,
+        });
+        // 每一個 youbike 站點位置
+        const BikeStation = new L.LatLng(
+          item.StationPosition.PositionLat,
+          item.StationPosition.PositionLon
+        );
+
+        // 計算兩者之間的距離
+        const line = new GeodesicLine();
+        const distance = line.distance(UserPosition, BikeStation);
+
+        // 取得站點狀態
+        const status = getStatus(item.StationUID);
+
+        // 加入到物件中
+        item = Object.assign(item, status, {
+          distance: Math.floor(distance),
+        });
+      }
+
+      // 依照距離排序
+      youbikeList.sort((a, b) => {
+        return Number(a.distance) - Number(b.distance);
+      });
+
+      // 發送取得 youbike 事件，並帶入資料
+      EventBus.emit("get-bike-list", newArray);
+    }
+    function getYoubikeStatusAPI(): void {
+      Api.getYoubikeStatus(locationCity).then(
+        (response: Model.IYoubikeStatus[]) => {
+          youbikeStatus = Object.assign(youbikeStatus, response);
+        }
+      );
+    }
+    function getYoubikeListAPI(): void {
+      // 建立 url 距離參數
+      distance.value =
+        "&%24spatialFilter=nearby(" +
+        position.latitude +
+        "%2C%20" +
+        position.longitude +
+        "%2C%20" +
+        meters.value +
+        ")&%24";
+
+      // 帶入後呼叫 API，取得範圍內 youbike
+      Api.getYoubikeList(locationCity, distance.value).then(
+        (response: Model.IYoubikeListResponse[]) => {
+          youbikeList = Object.assign(youbikeList, response);
+        }
+      );
     }
 
     return {

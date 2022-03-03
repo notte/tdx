@@ -1,5 +1,5 @@
 export interface IPointList {
-  name: string;
+  // name: string;
   latitude: number;
   longitude: number;
   StationUID: string;

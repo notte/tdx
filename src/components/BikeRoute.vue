@@ -41,8 +41,5 @@ export default defineComponent({
       word = ref("");
     return { where, who, level, word };
   },
-  clear(): void {
-    console.log("123");
-  },
 });
 </script>
