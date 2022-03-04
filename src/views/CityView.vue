@@ -40,12 +40,13 @@ export default defineComponent({
     const YoubikeList = ref(Status.TabType.YoubikeList);
     const BikeRoute = ref(Status.TabType.BikeRoute);
 
+    localStorage.setItem("tab", "YoubikeList");
     function isShow(page: Status.TabType): boolean {
       return Current.value === page ? true : false;
     }
     function clickTab(page: Status.TabType) {
       Current.value = page;
-      EventBus.emit("click-tab");
+      EventBus.emit("click-tab", page);
     }
     return {
       Current,

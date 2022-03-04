@@ -8,7 +8,6 @@ import { IPointList } from "@/models/interface/common";
 import * as map_handler from "@/utilities/map-handler";
 import * as L from "leaflet";
 import "leaflet/dist/leaflet.css";
-
 export default defineComponent({
   components: {},
   setup() {
@@ -78,21 +77,22 @@ export default defineComponent({
       }
     });
 
+    // tab 切換事件
     EventBus.on("click-tab", (page) => {
-      const markerPane = map.getPane("markerPane");
-      const shadowPane = map.getPane("shadowPane");
-      markerPane?.remove();
-      shadowPane?.remove();
-
-      pointList.value = [];
-      markers.value = [];
-
-      if (page === "BikeRoute") {
-        console.log("BikeRoute");
+      if (page !== localStorage.getItem("tab")) {
+        for (let item of markers.value) {
+          map.removeLayer(item as L.Marker);
+        }
+        map.removeLayer(user);
+        pointList.value = [];
+        markers.value = [];
+        localStorage.setItem("tab", String(page));
+      } else {
+        return;
       }
 
       if (page === "YoubikeList") {
-        EventBus.emit("click-youbike-tab");
+        user.addTo(map);
       }
     });
 

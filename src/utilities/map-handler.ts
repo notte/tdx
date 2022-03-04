@@ -58,6 +58,9 @@ export async function createMarkers(
 
     // 綁定點擊事件，單一標註點被點擊
     marker.on("click", () => {
+      for (const point of markers) {
+        map.removeLayer(point as L.Marker);
+      }
       // 先重新將所有標註點放到地圖上（以免出現多個被點擊 icon 樣式）
       setMap(markers, map).then(() => {
         // 地圖中心移到被點擊的標注點
@@ -93,8 +96,5 @@ export async function setMap(
     item.setZIndexOffset(0);
     item.addTo(map);
   }
-  // const markerPane = map.getPane("markerPane");
-  // const shadowPane = map.getPane("shadowPane");
-  // console.log(markerPane, shadowPane);
   return Promise.resolve(true);
 }

@@ -67,6 +67,8 @@ export default defineComponent({
     let youbikeList = reactive<Model.IYoubikeListResponse[]>([]);
     // 所有 youbike 狀態
     let youbikeStatus = reactive<Model.IYoubikeStatus[]>([]);
+    // 要傳送到 Map 的陣列
+    let pointList = reactive<IPointList[]>([]);
 
     // 先帶入縣市參數，取得所有站點狀態（車位之類的）
     getYoubikeStatusAPI();
@@ -115,15 +117,13 @@ export default defineComponent({
         }
       );
     }
-
     async function renderYoubikeList(): Promise<boolean> {
       // user 位置
       const UserPosition = new L.LatLng(latitude, longitude);
-      const newArray: IPointList[] = [];
 
       // 迭代所有 youbike 站點
       for (let item of youbikeList) {
-        newArray.push({
+        pointList.push({
           StationUID: item.StationUID,
           latitude: item.StationPosition.PositionLat,
           longitude: item.StationPosition.PositionLon,
@@ -153,7 +153,7 @@ export default defineComponent({
       });
 
       // 發送取得 youbike 事件，並帶入資料
-      EventBus.emit("get-bike-list", newArray);
+      EventBus.emit("get-bike-list", pointList);
       return Promise.resolve(true);
     }
 
@@ -168,9 +168,13 @@ export default defineComponent({
       );
     });
 
-    EventBus.on("click-youbike-tab", () => {
-      renderYoubikeList();
-      // console.log(position.latitude, position.longitude);
+    EventBus.on("click-tab", (page) => {
+      if (
+        page === "YoubikeList" &&
+        localStorage.getItem("tab") !== "YoubikeList"
+      ) {
+        EventBus.emit("get-bike-list", pointList);
+      }
     });
 
     // 站點被點擊事件，接收被點擊 id、經緯度
