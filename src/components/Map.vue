@@ -56,6 +56,14 @@ export default defineComponent({
         });
     });
 
+    EventBus.on("get-route-list", (data) => {
+      pointList.value = data as IPointList[];
+      map_handler.createMarkers(
+        pointList.value,
+        markers.value as L.Marker[],
+        map
+      );
+    });
     // 接收右側列表被點擊事件（會帶入被標註的位置）
     EventBus.on("bike-click-event", (position) => {
       // 先重新渲染標註點到地圖（會移除前一個被點擊標註點樣式）

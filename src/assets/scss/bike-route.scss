@@ -5,36 +5,23 @@ $grey: #c2c2c2;
 
 .bike-route {
     .list {
-        overflow-y: auto;
+        overflow-y: hidden;
     
         .item {
+            color: $black;
             cursor: pointer;
-            margin: 5% 10%;
+            margin: 0 auto;
+            margin-bottom: -1px;
             padding: 20px;
+            width: 100%;
 
-            .tag {
-                align-items: center;
+            .title {
                 display: flex;
                 justify-content: space-between;
-                margin: 10px 0;
-            }
-    
-            p {
-                color: $black;
-            }
 
-            p:first-child {
-                background-color: #467599;
-                border-radius: 30px;
-                color: #fff;
-                font-size: 13px;
-                padding: 3px 10px;
-            }
-
-            p:nth-child(2) {
-                color: #d64045;
-                font-size: 16px;
-                font-weight: 900;
+                h3 {
+                    color: $black;
+                }
             }
 
             h3 {
@@ -43,10 +30,7 @@ $grey: #c2c2c2;
     
         }
     
-        .item:last-child {
-            border-bottom: 0;
-        }
-
+    
         .item.active {
             background-color: #467599;
             color: $white;

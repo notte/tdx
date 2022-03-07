@@ -55,9 +55,17 @@ export default defineComponent({
     const scrollDOM = ref();
 
     // 要帶入 API 中的 url 參數
-    const distance = ref<string>("");
+    const distance = ref<string>(
+      "&%24spatialFilter=nearby(" +
+        latitude +
+        "%2C%20" +
+        longitude +
+        "%2C%20" +
+        500 +
+        ")&%24"
+    );
     // 站點要取得的物理範圍
-    const meters = ref<number>(500);
+    // const meters = ref<number>(500);
     // 確保縣市參數即使 F5 之後也存在
     const locationCity: string = city.$state.en
       ? city.$state.en
@@ -91,7 +99,7 @@ export default defineComponent({
       }
     }
     async function getYoubikeStatusAPI(): Promise<boolean> {
-      Api.getYoubikeStatus(locationCity).then(
+      Api.getYoubikeStatus(distance.value).then(
         (response: Model.IYoubikeStatus[]) => {
           youbikeStatus = Object.assign(youbikeStatus, response);
         }
@@ -100,18 +108,8 @@ export default defineComponent({
       return Promise.resolve(true);
     }
     function getYoubikeListAPI(): void {
-      // 建立 url 距離參數
-      distance.value =
-        "&%24spatialFilter=nearby(" +
-        latitude +
-        "%2C%20" +
-        longitude +
-        "%2C%20" +
-        meters.value +
-        ")&%24";
-
       // 帶入後呼叫 API，取得範圍內 youbike
-      Api.getYoubikeList(locationCity, distance.value).then(
+      Api.getYoubikeList(distance.value).then(
         (response: Model.IYoubikeListResponse[]) => {
           youbikeList = Object.assign(youbikeList, response);
         }
