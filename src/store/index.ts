@@ -11,12 +11,6 @@ export const cityStore = defineStore("city", {
     cnCity: (state) => state.cn,
     enCity: (state) => state.en,
   },
-  // actions: {
-  //   increment() {
-  //     console.log("increment");
-  //     return this;
-  //   },
-  // },
 });
 
 export const userPositionStore = defineStore("user-position", {

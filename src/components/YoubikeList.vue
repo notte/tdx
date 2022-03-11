@@ -67,9 +67,9 @@ export default defineComponent({
     // 站點要取得的物理範圍
     // const meters = ref<number>(500);
     // 確保縣市參數即使 F5 之後也存在
-    const locationCity: string = city.$state.en
-      ? city.$state.en
-      : window.location.pathname.slice(1);
+    // const locationCity: string = city.$state.en
+    //   ? city.$state.en
+    //   : window.location.pathname.slice(1);
 
     // 範圍內的 youbike 的站點列表
     let youbikeList = reactive<Model.IYoubikeListResponse[]>([]);
@@ -138,7 +138,6 @@ export default defineComponent({
 
         // 取得站點狀態
         const status = await getStatus(item.StationUID);
-        // console.log(status);
         // 加入到物件中
         item = Object.assign(item, status, {
           distance: Math.floor(distance),
@@ -166,14 +165,14 @@ export default defineComponent({
       );
     });
 
-    EventBus.on("click-tab", (page) => {
-      if (
-        page === "YoubikeList" &&
-        localStorage.getItem("tab") !== "YoubikeList"
-      ) {
-        EventBus.emit("get-bike-list", pointList);
-      }
-    });
+    // EventBus.on("click-tab", (page) => {
+    //   if (
+    //     page === "YoubikeList" &&
+    //     localStorage.getItem("tab") !== "YoubikeList"
+    //   ) {
+    //     EventBus.emit("get-bike-list", pointList);
+    //   }
+    // });
 
     // 站點被點擊事件，接收被點擊 id、經緯度
     function getClickedBike(id: string, latitude: number, longitude: number) {

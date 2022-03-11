@@ -1,5 +1,6 @@
 import * as Model from "@/models/interface/common";
 import EventBus from "@/utilities/event-bus";
+import { antPath } from "leaflet-ant-path";
 import * as L from "leaflet";
 
 export const userIcon = new L.Icon({
@@ -32,6 +33,11 @@ export const clickedBicycleIcon = new L.Icon({
   bounceOnAdd: true,
   bounceOnAddOptions: { duration: 1500, height: 200, loop: 10 },
 });
+
+export const cityCenter: Model.ICityCenter[] = [
+  { name: "Taipei", center: [25.083747, 121.561618] },
+];
+
 export async function renderMap(
   latitude: number,
   longitude: number
@@ -43,9 +49,23 @@ export async function renderMap(
   L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png").addTo(map);
   return Promise.resolve(map);
 }
+// 將標註點顯示於地圖（初始狀態）
+export async function setMap(
+  markers: L.Marker[],
+  map: L.Map
+): Promise<boolean> {
+  // 迭代標註點陣列
+  for (const item of markers) {
+    item.setIcon(bicycleIcon);
+    item.setZIndexOffset(1000);
+    item.addTo(map);
+  }
+  return Promise.resolve(true);
+}
+
 // 建立標註點陣列
-export async function createMarkers(
-  pointList: Model.IPointList[],
+export async function createYoubikrMarkers(
+  pointList: Model.IPointList[] | Model.IBikeRoutePointList[],
   markers: L.Marker[],
   map: L.Map
 ): Promise<boolean> {
@@ -58,6 +78,7 @@ export async function createMarkers(
 
     // 綁定點擊事件，單一標註點被點擊
     marker.on("click", () => {
+      // 移除所有標註點
       for (const point of markers) {
         map.removeLayer(point as L.Marker);
       }
@@ -85,16 +106,28 @@ export async function createMarkers(
 
   return Promise.resolve(true);
 }
-// 將標註點顯示於地圖（初始狀態）
-export async function setMap(
-  markers: L.Marker[],
+export async function setBikeRouteMarkers(
+  route: number[],
+  polylines: L.Polyline[],
   map: L.Map
 ): Promise<boolean> {
-  // 迭代標註點陣列
-  for (const item of markers) {
-    item.setIcon(bicycleIcon);
-    item.setZIndexOffset(0);
-    item.addTo(map);
+  let scale = 15;
+  const length = Math.ceil(route.length / 2);
+  const antPolyline = antPath(route, {
+    use: L.polyline,
+    fillColor: "red",
+  });
+  const center = antPolyline.getBounds().getCenter();
+  antPolyline.addTo(map);
+  map.panTo(center);
+
+  if (length < 5) {
+    scale = 17;
+  } else {
+    scale = 15;
   }
+
+  map.setZoom(scale);
+  polylines.push(antPolyline);
   return Promise.resolve(true);
 }

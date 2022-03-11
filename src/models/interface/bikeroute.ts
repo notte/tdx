@@ -11,4 +11,5 @@ export interface IBikeRouteResponse {
   FinishedTime: string;
   UpdateTime: string;
   Geometry: string;
+  GeometryArray?: number[];
 }

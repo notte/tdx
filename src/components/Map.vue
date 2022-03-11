@@ -4,21 +4,24 @@
 <script lang="ts">
 import { defineComponent, onMounted, ref } from "vue";
 import EventBus from "@/utilities/event-bus";
-import { IPointList } from "@/models/interface/common";
+import { IPointList, IBikeRoutePointList } from "@/models/interface/common";
 import * as map_handler from "@/utilities/map-handler";
 import * as L from "leaflet";
 import "leaflet/dist/leaflet.css";
+import { cityStore } from "@/store";
 export default defineComponent({
   components: {},
   setup() {
+    const city = cityStore();
     const latitude = Number(localStorage.getItem("latitude"));
     const longitude = Number(localStorage.getItem("longitude"));
     let map: L.Map;
 
     // 記錄目前地圖上的所有標註點資料（從別的組件傳過來的資料）
-    let pointList = ref<IPointList[]>();
+    let pointList = ref<IPointList[] | IBikeRoutePointList[]>();
     // 記錄目前地圖上的所有標註點（指地圖上使用的標註點本身，例如用哪個 icon 等等）
     let markers = ref<L.Marker[]>([]);
+    let polylines = ref<L.Polyline[]>([]);
 
     const user: L.Marker = L.marker([latitude, longitude], {
       icon: map_handler.userIcon,
@@ -35,6 +38,7 @@ export default defineComponent({
       就直接給予一個經緯度（面試時可能會用到）
       變數名稱改為地圖中心點 center
       */
+
     onMounted(() => {
       map_handler.renderMap(latitude, longitude).then((res) => {
         map = res;
@@ -47,7 +51,7 @@ export default defineComponent({
       pointList.value = data as IPointList[];
       // 建立標註點的陣列後，再渲染到畫面上
       map_handler
-        .createMarkers(pointList.value, markers.value as L.Marker[], map)
+        .createYoubikrMarkers(pointList.value, markers.value as L.Marker[], map)
         .then(() => {
           map_handler.setMap(markers.value as L.Marker[], map);
         })
@@ -57,15 +61,14 @@ export default defineComponent({
     });
 
     EventBus.on("get-route-list", (data) => {
-      pointList.value = data as IPointList[];
-      map_handler.createMarkers(
-        pointList.value,
-        markers.value as L.Marker[],
-        map
-      );
+      pointList.value = data as IBikeRoutePointList[];
+      // console.log(pointList.value.length);
     });
     // 接收右側列表被點擊事件（會帶入被標註的位置）
     EventBus.on("bike-click-event", (position) => {
+      for (let item of markers.value) {
+        map.removeLayer(item as L.Marker);
+      }
       // 先重新渲染標註點到地圖（會移除前一個被點擊標註點樣式）
       map_handler.setMap(markers.value as L.Marker[], map);
 
@@ -85,22 +88,48 @@ export default defineComponent({
       }
     });
 
+    EventBus.on("route-click-event", (route) => {
+      for (let item of polylines.value) {
+        map.removeLayer(item as L.Polyline);
+      }
+
+      map_handler.setBikeRouteMarkers(
+        route as number[],
+        polylines.value as L.Polyline[],
+        map
+      );
+    });
     // tab 切換事件
     EventBus.on("click-tab", (page) => {
       if (page !== localStorage.getItem("tab")) {
         for (let item of markers.value) {
           map.removeLayer(item as L.Marker);
         }
-        map.removeLayer(user);
+        for (let item of polylines.value) {
+          map.removeLayer(item as L.Polyline);
+        }
         pointList.value = [];
         markers.value = [];
+        polylines.value = [];
         localStorage.setItem("tab", String(page));
       } else {
         return;
       }
 
       if (page === "YoubikeList") {
-        user.addTo(map);
+        map.panTo([latitude, longitude]);
+        map.setZoom(16);
+        map.setMinZoom(15);
+      }
+
+      if (page === "BikeRoute") {
+        map.setMinZoom(11);
+        map.setZoom(14);
+        for (const item of map_handler.cityCenter) {
+          if (item.name === city.cnCity) {
+            map.panTo([item.center[0], item.center[1]]);
+          }
+        }
       }
     });
 

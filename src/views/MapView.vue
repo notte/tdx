@@ -5,7 +5,7 @@
     </div>
     <div class="menu">
       <div class="position">
-        <p>想要去哪裡？</p>
+        <p>現在在哪裡？</p>
         <h1 ref="local">選一個地方吧</h1>
         <button @click="toCity">出發</button>
       </div>
