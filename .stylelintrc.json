@@ -8,7 +8,7 @@
   "rules": {
     "selector-class-pattern":"[a-z]",
     "indentation": 4,
-    "max-nesting-depth":3
+    "max-nesting-depth":5
   },
   "ignoreFiles": [
     "./node_modules/**/*.{css,scss,sass}",

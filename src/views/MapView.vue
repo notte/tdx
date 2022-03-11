@@ -38,6 +38,13 @@ export default defineComponent({
       });
     };
 
+    watch(
+      () => city.cn,
+      () => {
+        local.value.innerHTML = city.cn;
+      }
+    );
+
     onMounted(() => {
       const data: Model.IMapSize = {
         width: map.value.offsetWidth,
@@ -45,13 +52,6 @@ export default defineComponent({
       };
       EventBus.emit("get-map-size", data);
     });
-
-    watch(
-      () => city.cn,
-      () => {
-        local.value.innerHTML = city.cn;
-      }
-    );
 
     return { map, local, city, toCity };
   },

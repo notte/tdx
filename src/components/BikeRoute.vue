@@ -38,10 +38,10 @@ export default defineComponent({
     const getListDOM = ref();
     const scrollDOM = ref();
     const city = cityStore();
-
     const locationCity: string = city.$state.en
       ? city.$state.en
       : window.location.pathname.slice(1);
+
     let bikeroute = reactive<Model.IBikeRouteResponse[]>([]);
 
     Api.getBikeRoute(locationCity).then(
@@ -65,6 +65,7 @@ export default defineComponent({
             bikeroute.splice(Number(index), 1);
           }
         }
+
         EventBus.emit("get-route-list", bikeroute);
       }
     );

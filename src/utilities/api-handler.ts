@@ -10,7 +10,6 @@ import jsSHA from "jssha";
 class handler {
   config: AxiosRequestConfig;
 
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
   constructor() {
     this.config = {
       baseURL: "https://ptx.transportdata.tw/MOTC/v2/",
