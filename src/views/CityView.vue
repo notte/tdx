@@ -1,6 +1,9 @@
 <template>
   <div class="container">
-    <div class="map" @click="demo"><Map /></div>
+    <div class="map">
+      <Sightseeing />
+      <Map />
+    </div>
     <div class="tab-container">
       <div class="tab">
         <button
@@ -23,6 +26,7 @@
 <script lang="ts">
 import { defineComponent, ref } from "vue";
 import Map from "@/components/Map.vue";
+import Sightseeing from "@/components/Sightseeing.vue";
 import BikeRoute from "@/components/BikeRoute.vue";
 import YoubikeList from "@/components/YoubikeList.vue";
 import EventBus from "@/utilities/event-bus";
@@ -34,6 +38,7 @@ export default defineComponent({
     Map,
     YoubikeList,
     BikeRoute,
+    Sightseeing,
   },
   setup() {
     const Current = ref(Status.TabType.YoubikeList);

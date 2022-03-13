@@ -8,9 +8,10 @@ $grey: #c2c2c2;
     width: 100%;
 
     .map {
-        align-items: center;
+        // align-items: center;
         display: flex;
         flex: 3;
+        flex-direction: column;
         justify-content: center;
     }
 
@@ -37,7 +38,7 @@ $grey: #c2c2c2;
                 margin: 0 5px;
             }
     
-            button.active {
+            .active {
                 color: rgba($black, 1);
             }
 
@@ -56,9 +57,11 @@ $grey: #c2c2c2;
     border-radius: 5px;
     box-shadow: 0 3px 5px 0 #61616140;
     height: 60%;
+    margin: 0 auto;
     width: 90%;
     z-index: 0;
 }
+
 
 @media screen and (max-width: 480px) {
     .container {
