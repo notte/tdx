@@ -4,6 +4,14 @@ export interface IPointList {
   StationUID: string;
 }
 
+export interface IOtherPointList {
+  name: string;
+  latitude: number;
+  longitude: number;
+  address: string | undefined;
+  opentime?: string;
+}
+
 export interface IBikeRoutePointList {
   GeometryArray: number[];
   RouteName: string;

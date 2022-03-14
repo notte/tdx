@@ -2,9 +2,10 @@
   <div id="map"></div>
 </template>
 <script lang="ts">
-import { defineComponent, onMounted, ref } from "vue";
+import { defineComponent, onMounted, reactive, ref } from "vue";
 import EventBus from "@/utilities/event-bus";
 import { IPointList, IBikeRoutePointList } from "@/models/interface/common";
+import { IOtherPointList } from "@/models/interface/other";
 import * as map_handler from "@/utilities/map-handler";
 import * as L from "leaflet";
 import "leaflet/dist/leaflet.css";
@@ -18,6 +19,7 @@ export default defineComponent({
 
     let map: L.Map;
     let pointList = ref<IPointList[] | IBikeRoutePointList[]>();
+    let otherPointList = reactive<IOtherPointList[]>([]);
     let markers = ref<L.Marker[]>([]);
     let polylines = ref<L.Polyline[]>([]);
 
@@ -39,7 +41,7 @@ export default defineComponent({
     EventBus.on("get-bike-list", (data) => {
       pointList.value = data as IPointList[];
       map_handler
-        .createYoubikrMarkers(pointList.value, markers.value as L.Marker[], map)
+        .createYoubikeMarkers(pointList.value, markers.value as L.Marker[], map)
         .then(() => {
           map_handler.setMap(markers.value as L.Marker[], map);
         })
@@ -50,6 +52,12 @@ export default defineComponent({
 
     EventBus.on("get-route-list", (data) => {
       pointList.value = data as IBikeRoutePointList[];
+    });
+
+    EventBus.on("get-other-list", (data) => {
+      otherPointList = [];
+      otherPointList = data as IOtherPointList[];
+      map_handler.createOtherMarkers(otherPointList, map);
     });
 
     EventBus.on("bike-click-event", (position) => {
@@ -91,6 +99,7 @@ export default defineComponent({
         for (let item of polylines.value) {
           map.removeLayer(item as L.Polyline);
         }
+        map.removeLayer(user as L.Marker);
         pointList.value = [];
         markers.value = [];
         polylines.value = [];
@@ -100,17 +109,16 @@ export default defineComponent({
       }
 
       if (page === "YoubikeList") {
-        map.panTo([latitude, longitude]);
-        map.setZoom(16);
         map.setMinZoom(15);
+        map.flyTo([latitude, longitude], 16);
+        user.addTo(map);
       }
 
       if (page === "BikeRoute") {
         map.setMinZoom(11);
-        map.setZoom(14);
         for (const item of map_handler.cityCenter) {
-          if (item.name === city.cnCity) {
-            map.panTo([item.center[0], item.center[1]]);
+          if (item.name === city.en) {
+            map.flyTo([item.center[0], item.center[1]], 14);
           }
         }
       }

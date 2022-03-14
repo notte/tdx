@@ -137,9 +137,9 @@ export default defineComponent({
     }
 
     function getClickedBike(id: string, latitude: number, longitude: number) {
-      const Array = getListDOM.value.children;
+      const Array = getListDOM.value?.children;
 
-      for (let index = 0; index < Array.length; index++) {
+      for (let index = 0; index < Array?.length; index++) {
         const className = Array[index].classList.value.lastIndexOf("active");
 
         if (className !== -1) {

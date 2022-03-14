@@ -20,6 +20,7 @@
     "leaflet": "^1.7.1",
     "leaflet-ant-path": "^1.3.0",
     "leaflet.geodesic": "^2.6.1",
+    "leaflet.markercluster": "^1.5.3",
     "mitt": "^3.0.0",
     "npm": "^8.3.0",
     "pinia": "^2.0.9",

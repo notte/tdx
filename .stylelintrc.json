@@ -11,7 +11,7 @@
     "max-nesting-depth":5,
     "selector-max-compound-selectors":5,
     "selector-max-id":1,
-    "no-descending-specificity":false
+    "no-descending-specificity":null
   },
   "ignoreFiles": [
     "./node_modules/**/*.{css,scss,sass}",

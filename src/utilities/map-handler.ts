@@ -2,11 +2,11 @@ import * as Model from "@/models/interface/common";
 import EventBus from "@/utilities/event-bus";
 import { antPath } from "leaflet-ant-path";
 import * as L from "leaflet";
+import { markercluster } from "leaflet.markercluster";
 
 export const userIcon = new L.Icon({
   iconUrl: "../icons/map.png",
-  shadowUrl:
-    "https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png",
+  shadowUrl: "../icons/marker-shadow.png",
   iconSize: [40, 41],
   shadowSize: [41, 41],
   shadowAnchor: [12, 20],
@@ -15,8 +15,7 @@ export const userIcon = new L.Icon({
 });
 export const bicycleIcon = new L.Icon({
   iconUrl: "../icons/bicycle.png",
-  shadowUrl:
-    "https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png",
+  shadowUrl: "../icons/marker-shadow.png",
   iconSize: [40, 41],
   shadowSize: [41, 41],
   shadowAnchor: [12, 20],
@@ -25,8 +24,7 @@ export const bicycleIcon = new L.Icon({
 });
 export const clickedBicycleIcon = new L.Icon({
   iconUrl: "../icons/clickedBicycle.png",
-  shadowUrl:
-    "https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png",
+  shadowUrl: "../icons/marker-shadow.png",
   iconSize: [40, 41],
   shadowSize: [41, 41],
   shadowAnchor: [12, 20],
@@ -61,8 +59,8 @@ export async function setMap(
   return Promise.resolve(true);
 }
 
-export async function createYoubikrMarkers(
-  pointList: Model.IPointList[] | Model.IBikeRoutePointList[],
+export async function createYoubikeMarkers(
+  pointList: Model.IPointList[],
   markers: L.Marker[],
   map: L.Map
 ): Promise<boolean> {
@@ -85,7 +83,7 @@ export async function createYoubikrMarkers(
         });
 
         marker.setIcon(clickedBicycleIcon);
-        marker.setZIndexOffset(1000);
+        marker.setZIndexOffset(10000);
       });
     });
     markers.push(marker);
@@ -118,4 +116,13 @@ export async function setBikeRouteMarkers(
   map.setZoom(scale);
   polylines.push(antPolyline);
   return Promise.resolve(true);
+}
+
+export async function createOtherMarkers(
+  pointList: Model.IOtherPointList[],
+  map: L.Map
+) {
+  const markers = markercluster();
+  console.log(markers);
+  console.log(pointList);
 }
