@@ -31,7 +31,7 @@ export default defineComponent({
         .center([121, 24]);
       let path = d3.geoPath().projection(projection);
       let svg = d3
-        .select(".map")
+        .select(".taiwan")
         .append("svg")
         .attr("width", width)
         .attr("height", height);

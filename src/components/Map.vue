@@ -44,26 +44,28 @@ export default defineComponent({
     });
 
     EventBus.on("click-tab", (page) => {
-      if (page !== localStorage.getItem("tab")) {
-        for (let item of markers.value) {
-          map.removeLayer(item as L.Marker);
-        }
-        for (let item of polylines.value) {
-          map.removeLayer(item as L.Polyline);
-        }
-        markerGroup.eachLayer((layer) => {
-          if (layer instanceof L.Marker) {
-            markerGroup.removeLayer(layer);
-          }
-        });
-        map.removeLayer(user as L.Marker);
-        pointList.value = [];
-        markers.value = [];
-        polylines.value = [];
-        localStorage.setItem("tab", String(page));
-      } else {
+      if (page === localStorage.getItem("tab")) {
         return;
       }
+
+      localStorage.setItem("tab", String(page));
+
+      for (let item of markers.value) {
+        map.removeLayer(item as L.Marker);
+      }
+      for (let item of polylines.value) {
+        map.removeLayer(item as L.Polyline);
+      }
+      markerGroup.eachLayer((layer) => {
+        if (layer instanceof L.Marker) {
+          markerGroup.removeLayer(layer);
+        }
+      });
+
+      map.removeLayer(user as L.Marker);
+      pointList.value = [];
+      markers.value = [];
+      polylines.value = [];
 
       if (page === "YoubikeList") {
         map.setMinZoom(15);
@@ -73,11 +75,7 @@ export default defineComponent({
 
       if (page === "BikeRoute") {
         map.setMinZoom(11);
-        for (const item of map_handler.cityCenter) {
-          if (item.name === city.en) {
-            map.flyTo([item.center[0], item.center[1]], 14);
-          }
-        }
+        map.flyTo([25.083747, 121.561618], 11);
       }
     });
 
@@ -91,10 +89,6 @@ export default defineComponent({
         .catch((error) => {
           console.log(error);
         });
-    });
-
-    EventBus.on("get-route-list", (data) => {
-      pointList.value = data as IBikeRoutePointList[];
     });
 
     EventBus.on("get-other-list", (data) => {

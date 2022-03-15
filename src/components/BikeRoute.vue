@@ -65,8 +65,6 @@ export default defineComponent({
             bikeroute.splice(Number(index), 1);
           }
         }
-
-        EventBus.emit("get-route-list", bikeroute);
       }
     );
 

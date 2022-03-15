@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <div class="map" ref="map">
+    <div class="taiwan" ref="taiwan">
       <Taiwan />
     </div>
     <div class="menu">
@@ -27,7 +27,7 @@ export default defineComponent({
   },
   setup() {
     const city = cityStore();
-    const map = ref();
+    const taiwan = ref();
     const local = ref();
     const router = useRouter();
 
@@ -47,13 +47,13 @@ export default defineComponent({
 
     onMounted(() => {
       const data: Model.IMapSize = {
-        width: map.value.offsetWidth,
-        height: map.value.offsetHeight,
+        width: taiwan.value.offsetWidth,
+        height: taiwan.value.offsetHeight,
       };
       EventBus.emit("get-map-size", data);
     });
 
-    return { map, local, city, toCity };
+    return { taiwan, local, city, toCity };
   },
 });
 </script>

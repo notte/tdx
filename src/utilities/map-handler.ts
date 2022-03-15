@@ -70,10 +70,6 @@ export const hotelIcon = new L.Icon({
   bounceOnAddOptions: { duration: 1500, height: 200, loop: 10 },
 });
 
-export const cityCenter: Model.ICityCenter[] = [
-  { name: "Taipei", center: [25.083747, 121.561618] },
-];
-
 export async function renderMap(
   latitude: number,
   longitude: number
