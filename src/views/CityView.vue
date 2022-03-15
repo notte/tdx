@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="map">
-      <Sightseeing />
+      <Sightseeing v-if="Current === BikeRoute" />
       <Map />
     </div>
     <div class="tab-container">

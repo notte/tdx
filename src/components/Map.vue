@@ -7,9 +7,12 @@ import EventBus from "@/utilities/event-bus";
 import { IPointList, IBikeRoutePointList } from "@/models/interface/common";
 import { IOtherPointList } from "@/models/interface/other";
 import * as map_handler from "@/utilities/map-handler";
-import * as L from "leaflet";
+import L from "leaflet";
 import "leaflet/dist/leaflet.css";
+import "leaflet.markercluster";
+import "leaflet.markercluster/dist/MarkerCluster.css";
 import { cityStore } from "@/store";
+
 export default defineComponent({
   components: {},
   setup() {
@@ -21,6 +24,8 @@ export default defineComponent({
     let pointList = ref<IPointList[] | IBikeRoutePointList[]>();
     let otherPointList = reactive<IOtherPointList[]>([]);
     let markers = ref<L.Marker[]>([]);
+    const markerGroup = L.markerClusterGroup();
+
     let polylines = ref<L.Polyline[]>([]);
 
     const user: L.Marker = L.marker([latitude, longitude], {
@@ -36,6 +41,44 @@ export default defineComponent({
         map = res;
         user.addTo(map);
       });
+    });
+
+    EventBus.on("click-tab", (page) => {
+      if (page !== localStorage.getItem("tab")) {
+        for (let item of markers.value) {
+          map.removeLayer(item as L.Marker);
+        }
+        for (let item of polylines.value) {
+          map.removeLayer(item as L.Polyline);
+        }
+        markerGroup.eachLayer((layer) => {
+          if (layer instanceof L.Marker) {
+            markerGroup.removeLayer(layer);
+          }
+        });
+        map.removeLayer(user as L.Marker);
+        pointList.value = [];
+        markers.value = [];
+        polylines.value = [];
+        localStorage.setItem("tab", String(page));
+      } else {
+        return;
+      }
+
+      if (page === "YoubikeList") {
+        map.setMinZoom(15);
+        map.flyTo([latitude, longitude], 16);
+        user.addTo(map);
+      }
+
+      if (page === "BikeRoute") {
+        map.setMinZoom(11);
+        for (const item of map_handler.cityCenter) {
+          if (item.name === city.en) {
+            map.flyTo([item.center[0], item.center[1]], 14);
+          }
+        }
+      }
     });
 
     EventBus.on("get-bike-list", (data) => {
@@ -55,9 +98,15 @@ export default defineComponent({
     });
 
     EventBus.on("get-other-list", (data) => {
+      markerGroup.eachLayer((layer) => {
+        if (layer instanceof L.Marker) {
+          markerGroup.removeLayer(layer);
+        }
+      });
       otherPointList = [];
-      otherPointList = data as IOtherPointList[];
-      map_handler.createOtherMarkers(otherPointList, map);
+      otherPointList = (data as IOtherPointList | string[])[0];
+      const type = (data as IOtherPointList | string[])[1];
+      map_handler.createOtherMarkers(otherPointList, type, markerGroup, map);
     });
 
     EventBus.on("bike-click-event", (position) => {
@@ -89,39 +138,6 @@ export default defineComponent({
         polylines.value as L.Polyline[],
         map
       );
-    });
-
-    EventBus.on("click-tab", (page) => {
-      if (page !== localStorage.getItem("tab")) {
-        for (let item of markers.value) {
-          map.removeLayer(item as L.Marker);
-        }
-        for (let item of polylines.value) {
-          map.removeLayer(item as L.Polyline);
-        }
-        map.removeLayer(user as L.Marker);
-        pointList.value = [];
-        markers.value = [];
-        polylines.value = [];
-        localStorage.setItem("tab", String(page));
-      } else {
-        return;
-      }
-
-      if (page === "YoubikeList") {
-        map.setMinZoom(15);
-        map.flyTo([latitude, longitude], 16);
-        user.addTo(map);
-      }
-
-      if (page === "BikeRoute") {
-        map.setMinZoom(11);
-        for (const item of map_handler.cityCenter) {
-          if (item.name === city.en) {
-            map.flyTo([item.center[0], item.center[1]], 14);
-          }
-        }
-      }
     });
 
     return {

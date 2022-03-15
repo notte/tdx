@@ -105,6 +105,3 @@ interface IPosition {
   PositionLat: number;
   GeoHash: string;
 }
-
-// interface IParkingPosition {
-// }

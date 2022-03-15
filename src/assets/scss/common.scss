@@ -27,3 +27,8 @@ body {
         font-size: 13px;
     }
 }
+
+.leaflet-popup-content p {
+    line-height: normal;
+    margin: 0 !important;
+}

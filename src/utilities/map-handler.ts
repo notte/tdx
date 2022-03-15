@@ -1,8 +1,10 @@
 import * as Model from "@/models/interface/common";
 import EventBus from "@/utilities/event-bus";
+import L from "leaflet";
+import "leaflet.markercluster";
+import "leaflet.markercluster/dist/MarkerCluster.css";
+import "leaflet.markercluster/dist/MarkerCluster.Default.css";
 import { antPath } from "leaflet-ant-path";
-import * as L from "leaflet";
-import { markercluster } from "leaflet.markercluster";
 
 export const userIcon = new L.Icon({
   iconUrl: "../icons/map.png",
@@ -31,6 +33,43 @@ export const clickedBicycleIcon = new L.Icon({
   bounceOnAdd: true,
   bounceOnAddOptions: { duration: 1500, height: 200, loop: 10 },
 });
+export const restaurantIcon = new L.Icon({
+  iconUrl: "../icons/restaurant.png",
+  shadowUrl: "../icons/marker-shadow.png",
+  iconSize: [40, 41],
+  shadowSize: [41, 41],
+  shadowAnchor: [12, 20],
+  bounceOnAdd: true,
+  bounceOnAddOptions: { duration: 1500, height: 200, loop: 10 },
+});
+export const scenicspotIcon = new L.Icon({
+  iconUrl: "../icons/scenicspot.png",
+  shadowUrl: "../icons/marker-shadow.png",
+  iconSize: [40, 41],
+  shadowSize: [41, 41],
+  shadowAnchor: [12, 20],
+  bounceOnAdd: true,
+  bounceOnAddOptions: { duration: 1500, height: 200, loop: 10 },
+});
+export const activityIcon = new L.Icon({
+  iconUrl: "../icons/activity.png",
+  shadowUrl: "../icons/marker-shadow.png",
+  iconSize: [40, 41],
+  shadowSize: [41, 41],
+  shadowAnchor: [12, 20],
+  bounceOnAdd: true,
+  bounceOnAddOptions: { duration: 1500, height: 200, loop: 10 },
+});
+export const hotelIcon = new L.Icon({
+  iconUrl: "../icons/hotel.png",
+  shadowUrl: "../icons/marker-shadow.png",
+  iconSize: [40, 41],
+  shadowSize: [41, 41],
+  shadowAnchor: [12, 20],
+  bounceOnAdd: true,
+  bounceOnAddOptions: { duration: 1500, height: 200, loop: 10 },
+});
+
 export const cityCenter: Model.ICityCenter[] = [
   { name: "Taipei", center: [25.083747, 121.561618] },
 ];
@@ -97,32 +136,75 @@ export async function setBikeRouteMarkers(
   polylines: L.Polyline[],
   map: L.Map
 ): Promise<boolean> {
-  let scale = 15;
-  const length = Math.ceil(route.length / 2);
   const antPolyline = antPath(route, {
-    use: L.polyline,
-    fillColor: "red",
-  });
-  const center = antPolyline.getBounds().getCenter();
-  antPolyline.addTo(map);
-  map.panTo(center);
-
-  if (length < 5) {
-    scale = 17;
-  } else {
-    scale = 15;
-  }
-
-  map.setZoom(scale);
+    paused: false,
+    reverse: false,
+    delay: 2000,
+    dashArray: [10, 20],
+    weight: 6,
+    opacity: 0.5,
+  }).addTo(map);
+  map.fitBounds(antPolyline.getBounds());
   polylines.push(antPolyline);
   return Promise.resolve(true);
 }
 
 export async function createOtherMarkers(
   pointList: Model.IOtherPointList[],
+  type: string,
+  markerGroup: L.MarkerClusterGroup,
   map: L.Map
-) {
-  const markers = markercluster();
-  console.log(markers);
-  console.log(pointList);
+): Promise<boolean> {
+  for (const item of pointList) {
+    if (item.address === undefined) {
+      item.address = "";
+    }
+    if (item.opentime === undefined) {
+      item.opentime = "";
+    }
+
+    const marker = L.marker([item.latitude, item.longitude]);
+    const popup = L.popup({
+      keepInView: true,
+      closeButton: false,
+      maxHeight: 100,
+    }).setContent(
+      "<h2>" +
+        item.name +
+        "</h2>" +
+        "<p>" +
+        item.address +
+        "</p>" +
+        "<p>" +
+        item.opentime +
+        "</p>"
+    );
+    marker.on("click", () => {
+      marker.bindPopup(popup).openPopup();
+      marker.setZIndexOffset(10000);
+    });
+
+    switch (type) {
+      case "restaurant":
+        marker.setIcon(restaurantIcon);
+        break;
+      case "scenicspot":
+        marker.setIcon(scenicspotIcon);
+        break;
+      case "activity":
+        marker.setIcon(activityIcon);
+        break;
+      case "hotel":
+        marker.setIcon(hotelIcon);
+        break;
+
+      default:
+        break;
+    }
+    markerGroup.addLayer(marker);
+  }
+
+  map.addLayer(markerGroup);
+
+  return Promise.resolve(true);
 }
