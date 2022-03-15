@@ -46,3 +46,8 @@ export interface IStationName {
   Zh_tw: string;
   En: string;
 }
+
+export interface IStatus {
+  AvailableRentBikes: number;
+  AvailableReturnBikes: number;
+}

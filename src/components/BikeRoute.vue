@@ -5,7 +5,9 @@
         class="item"
         v-for="(item, index) in bikeroute"
         :key="index"
-        @click="getClickedRoute(index, item.GeometryArray)"
+        @click="
+          getClickedRoute(getListDOM, scrollDOM, index, item.GeometryArray)
+        "
       >
         <div class="title">
           <h4>{{ item.RouteName }}</h4>
@@ -26,10 +28,9 @@
 <script lang="ts">
 import { defineComponent, reactive, ref } from "vue";
 import * as Model from "@/models/interface/bikeroute";
+import * as bikeroute_handler from "@/utilities/bikeroute-handler";
 import { cityStore } from "@/store/index";
-import EventBus from "@/utilities/event-bus";
 import Api from "@/api/bikeroute";
-import Wkt from "wicket";
 import "@/assets/scss/bike-route.scss";
 
 export default defineComponent({
@@ -38,6 +39,7 @@ export default defineComponent({
     const getListDOM = ref();
     const scrollDOM = ref();
     const city = cityStore();
+    const getClickedRoute = bikeroute_handler.getClickedRoute;
     const locationCity: string = city.$state.en
       ? city.$state.en
       : window.location.pathname.slice(1);
@@ -49,7 +51,7 @@ export default defineComponent({
         bikeroute = Object.assign(bikeroute, response);
 
         for (let item of bikeroute) {
-          setRoutePoint(item).then((res) => {
+          bikeroute_handler.setRoutePoint(item).then((res) => {
             item.GeometryArray = res;
           });
         }
@@ -67,33 +69,6 @@ export default defineComponent({
         }
       }
     );
-
-    async function setRoutePoint(
-      item: Model.IBikeRouteResponse
-    ): Promise<number[]> {
-      const wkt = new Wkt.Wkt();
-      let array = wkt.read(item.Geometry).toJson();
-      let newData: number[] = [];
-      for (let i = 0; i < array.coordinates.length; i++) {
-        for (let j = 0; j < array.coordinates[i].length; j++) {
-          newData.push(array.coordinates[i][j].reverse());
-        }
-      }
-      return Promise.resolve(newData as number[]);
-    }
-
-    function getClickedRoute(index: number, route: number[]) {
-      const Array = getListDOM.value.children;
-      for (let index = 0; index < Array.length; index++) {
-        Array[index].classList.value = Array[index].classList.value.replace(
-          "active",
-          ""
-        );
-      }
-      Array[index].classList.value = "item active";
-      scrollDOM.value.scrollTop = 126 * index;
-      EventBus.emit("route-click-event", route);
-    }
 
     return { bikeroute, getListDOM, scrollDOM, getClickedRoute };
   },

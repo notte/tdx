@@ -1,3 +1,6 @@
+<template>
+  <div></div>
+</template>
 <script lang="ts">
 import { defineComponent } from "vue";
 import * as Model from "@/models/interface/map";

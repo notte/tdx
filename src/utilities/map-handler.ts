@@ -88,7 +88,6 @@ export async function setMap(
 ): Promise<boolean> {
   for (const item of markers) {
     item.setIcon(bicycleIcon);
-    item.setZIndexOffset(1000);
     item.addTo(map);
   }
   return Promise.resolve(true);
@@ -116,11 +115,11 @@ export async function createYoubikeMarkers(
           latitude: item.latitude,
           longitude: item.longitude,
         });
-
-        marker.setIcon(clickedBicycleIcon);
-        marker.setZIndexOffset(10000);
+        marker.setZIndexOffset(100000);
       });
+      marker.setIcon(clickedBicycleIcon);
     });
+
     markers.push(marker);
   }
 
@@ -177,7 +176,6 @@ export async function createOtherMarkers(
     );
     marker.on("click", () => {
       marker.bindPopup(popup).openPopup();
-      marker.setZIndexOffset(10000);
     });
 
     switch (type) {

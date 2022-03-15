@@ -11,12 +11,10 @@ import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import "leaflet.markercluster";
 import "leaflet.markercluster/dist/MarkerCluster.css";
-import { cityStore } from "@/store";
 
 export default defineComponent({
   components: {},
   setup() {
-    const city = cityStore();
     const latitude = Number(localStorage.getItem("latitude"));
     const longitude = Number(localStorage.getItem("longitude"));
 
@@ -117,7 +115,6 @@ export default defineComponent({
       for (const item of markers.value) {
         if (item.getLatLng().lat === latitude) {
           item.setIcon(map_handler.clickedBicycleIcon);
-          item.setZIndexOffset(1000);
         }
       }
     });
