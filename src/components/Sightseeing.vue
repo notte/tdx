@@ -33,6 +33,7 @@
 <script lang="ts">
 import { defineComponent, reactive } from "vue";
 import { cityStore } from "@/store/index";
+import { ElNotification } from "element-plus";
 import * as Model from "@/models/interface/other";
 import EventBus from "@/utilities/event-bus";
 import "@/assets/scss/sightseeing.scss";
@@ -58,18 +59,52 @@ export default defineComponent({
     let roomList = reactive<Model.IGetRoomResponse[]>([]);
     let pointList = reactive<Model.IOtherPointList[]>([]);
 
-    Api.getFood(locationCity).then((res) => {
-      foodList = Object.assign(foodList, res);
-    });
-    Api.getSightsee(locationCity).then((res) => {
-      sightseeList = Object.assign(sightseeList, res);
-    });
-    Api.getParty(locationCity).then((res) => {
-      partyList = Object.assign(partyList, res);
-    });
-    Api.getRoom(locationCity).then((res) => {
-      roomList = Object.assign(roomList, res);
-    });
+    Api.getFood(locationCity)
+      .then((res) => {
+        foodList = Object.assign(foodList, res);
+      })
+      .catch((error) => {
+        ElNotification({
+          title: "Error",
+          message: error.message,
+          type: "error",
+        });
+      });
+
+    Api.getSightsee(locationCity)
+      .then((res) => {
+        sightseeList = Object.assign(sightseeList, res);
+      })
+      .catch((error) => {
+        ElNotification({
+          title: "Error",
+          message: error.message,
+          type: "error",
+        });
+      });
+
+    Api.getParty(locationCity)
+      .then((res) => {
+        partyList = Object.assign(partyList, res);
+      })
+      .catch((error) => {
+        ElNotification({
+          title: "Error",
+          message: error.message,
+          type: "error",
+        });
+      });
+    Api.getRoom(locationCity)
+      .then((res) => {
+        roomList = Object.assign(roomList, res);
+      })
+      .catch((error) => {
+        ElNotification({
+          title: "Error",
+          message: error.message,
+          type: "error",
+        });
+      });
 
     function setFoodInfo() {
       for (let item of Object.getOwnPropertyNames(status)) {

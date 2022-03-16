@@ -3,12 +3,34 @@
 </template>
 <script lang="ts">
 import { defineComponent } from "vue";
+import { useLoading } from "vue-loading-overlay";
+import EventBus from "@/utilities/event-bus";
+import { ElNotification } from "element-plus";
 import "@/assets/scss/common.scss";
 
 export default defineComponent({
   components: {},
   setup() {
-    let options = { enableHighAccuracy: true };
+    const options = { enableHighAccuracy: true };
+
+    const $loading = useLoading();
+    let loader;
+
+    EventBus.on("show-loading", () => {
+      loader = $loading.show({
+        backgroundColor: "#333",
+        color: "#fff",
+        loader: "dots",
+      });
+    });
+
+    EventBus.on("close-loading", () => {
+      if (loader) {
+        loader.hide();
+      } else {
+        return;
+      }
+    });
 
     navigator.geolocation.getCurrentPosition(success, error, options);
 
@@ -17,7 +39,11 @@ export default defineComponent({
       localStorage.setItem("longitude", String(location.coords.longitude));
     }
     function error(error) {
-      console.log("error:" + error.message);
+      ElNotification({
+        title: "Error",
+        message: error.message,
+        type: "error",
+      });
     }
 
     return {};

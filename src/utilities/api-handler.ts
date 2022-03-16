@@ -5,6 +5,7 @@ import axios, {
   Method,
 } from "axios";
 import { requestFail, responseFail } from "@/utilities/error-handler";
+import { ElNotification } from "element-plus";
 import jsSHA from "jssha";
 
 class handler {
@@ -46,6 +47,11 @@ class handler {
       result = await instance.request(this.config);
       return Promise.resolve(result);
     } catch (error) {
+      ElNotification({
+        title: "Error",
+        message: "get result fail",
+        type: "error",
+      });
       return Promise.reject(error);
     }
   }

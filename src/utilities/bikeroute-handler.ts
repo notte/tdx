@@ -1,4 +1,5 @@
 import * as Model from "@/models/interface/bikeroute";
+import { ElNotification } from "element-plus";
 import EventBus from "@/utilities/event-bus";
 import Api from "@/api/bikeroute";
 import Wkt from "wicket";
@@ -43,9 +44,17 @@ export function getBikeRouteAPI(
     bikeroute = Object.assign(bikeroute, response);
 
     for (const item of bikeroute) {
-      setRoutePoint(item).then((res) => {
-        item.GeometryArray = res;
-      });
+      setRoutePoint(item)
+        .then((res) => {
+          item.GeometryArray = res;
+        })
+        .catch((error) => {
+          ElNotification({
+            title: "Error",
+            message: error.message,
+            type: "error",
+          });
+        });
     }
 
     bikeroute.sort((a, b) => {

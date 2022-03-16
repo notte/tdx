@@ -7,6 +7,7 @@ import EventBus from "@/utilities/event-bus";
 import { IPointList, IBikeRoutePointList } from "@/models/interface/common";
 import { IOtherPointList } from "@/models/interface/other";
 import * as map_handler from "@/utilities/map-handler";
+import { ElNotification } from "element-plus";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import "leaflet.markercluster";
@@ -85,7 +86,11 @@ export default defineComponent({
           map_handler.setMap(markers.value as L.Marker[], map);
         })
         .catch((error) => {
-          console.log(error);
+          ElNotification({
+            title: "Error",
+            message: error.message,
+            type: "error",
+          });
         });
     });
 
@@ -115,6 +120,7 @@ export default defineComponent({
       for (const item of markers.value) {
         if (item.getLatLng().lat === latitude) {
           item.setIcon(map_handler.clickedBicycleIcon);
+          item.setZIndexOffset(999);
         }
       }
     });

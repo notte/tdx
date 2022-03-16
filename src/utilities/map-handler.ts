@@ -1,5 +1,6 @@
 import * as Model from "@/models/interface/common";
 import EventBus from "@/utilities/event-bus";
+import { ElNotification } from "element-plus";
 import L from "leaflet";
 import "leaflet.markercluster";
 import "leaflet.markercluster/dist/MarkerCluster.css";
@@ -88,6 +89,7 @@ export async function setMap(
 ): Promise<boolean> {
   for (const item of markers) {
     item.setIcon(bicycleIcon);
+    item.setZIndexOffset(0);
     item.addTo(map);
   }
   return Promise.resolve(true);
@@ -101,23 +103,30 @@ export async function createYoubikeMarkers(
   for (const item of pointList as Model.IPointList[]) {
     const marker = L.marker([item.latitude, item.longitude], {
       icon: bicycleIcon,
+      zIndexOffset: 0,
     });
 
     marker.on("click", () => {
       for (const point of markers) {
         map.removeLayer(point as L.Marker);
       }
-      setMap(markers, map).then(() => {
-        map.panTo([item.latitude, item.longitude]);
+      setMap(markers, map)
+        .then(() => {
+          map.panTo([item.latitude, item.longitude]);
 
-        EventBus.emit("map-click-event", {
-          StationUID: item.StationUID,
-          latitude: item.latitude,
-          longitude: item.longitude,
+          EventBus.emit("map-click-event", {
+            StationUID: item.StationUID,
+            latitude: item.latitude,
+            longitude: item.longitude,
+          });
+        })
+        .catch((error) => {
+          ElNotification({
+            title: "Error",
+            message: error.message,
+            type: "error",
+          });
         });
-        marker.setZIndexOffset(100000);
-      });
-      marker.setIcon(clickedBicycleIcon);
     });
 
     markers.push(marker);

@@ -1,5 +1,6 @@
 import { ref } from "vue";
 import * as Model from "@/models/interface/youbike";
+import { ElNotification } from "element-plus";
 import { IPointList } from "@/models/interface/common";
 import { GeodesicLine } from "leaflet.geodesic";
 import EventBus from "@/utilities/event-bus";
@@ -22,11 +23,17 @@ export async function getYoubikeStatusAPI(
   youbikeStatus: Model.IYoubikeStatus[],
   youbikeList: Model.IYoubikeListResponse[]
 ): Promise<boolean> {
-  Api.getYoubikeStatus(distance.value).then(
-    (response: Model.IYoubikeStatus[]) => {
+  Api.getYoubikeStatus(distance.value)
+    .then((response: Model.IYoubikeStatus[]) => {
       youbikeStatus = Object.assign(youbikeStatus, response);
-    }
-  );
+    })
+    .catch((error) => {
+      ElNotification({
+        title: "Error",
+        message: error.message,
+        type: "error",
+      });
+    });
   await getYoubikeListAPI(youbikeList);
   return Promise.resolve(true);
 }
@@ -34,11 +41,17 @@ export async function getYoubikeStatusAPI(
 export function getYoubikeListAPI(
   youbikeList: Model.IYoubikeListResponse[]
 ): void {
-  Api.getYoubikeList(distance.value).then(
-    (response: Model.IYoubikeListResponse[]) => {
+  Api.getYoubikeList(distance.value)
+    .then((response: Model.IYoubikeListResponse[]) => {
       youbikeList = Object.assign(youbikeList, response);
-    }
-  );
+    })
+    .catch((error) => {
+      ElNotification({
+        title: "Error",
+        message: error.message,
+        type: "error",
+      });
+    });
 }
 
 export async function renderYoubikeList(

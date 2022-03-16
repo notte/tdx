@@ -26,9 +26,10 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, reactive, ref } from "vue";
+import { defineComponent, reactive, ref, onMounted } from "vue";
 import * as Model from "@/models/interface/bikeroute";
 import * as bikeroute_handler from "@/utilities/bikeroute-handler";
+import EventBus from "@/utilities/event-bus";
 import { cityStore } from "@/store/index";
 import "@/assets/scss/bike-route.scss";
 
@@ -46,6 +47,9 @@ export default defineComponent({
     let bikeroute = reactive<Model.IBikeRouteResponse[]>([]);
 
     bikeroute_handler.getBikeRouteAPI(locationCity, bikeroute);
+    onMounted(() => {
+      EventBus.emit("close-loading");
+    });
 
     return { bikeroute, getListDOM, scrollDOM, getClickedRoute };
   },

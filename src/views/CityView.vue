@@ -52,6 +52,7 @@ export default defineComponent({
     }
     function clickTab(page: Status.TabType) {
       Current.value = page;
+      EventBus.emit("show-loading");
       EventBus.emit("click-tab", page);
     }
 

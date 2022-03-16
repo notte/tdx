@@ -32,6 +32,7 @@ export default defineComponent({
     const router = useRouter();
 
     const toCity = (): void => {
+      EventBus.emit("show-loading");
       router.push({
         name: "City",
         params: { id: city.en },

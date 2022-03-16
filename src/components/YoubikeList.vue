@@ -33,7 +33,7 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, watch, reactive, ref } from "vue";
+import { defineComponent, watch, reactive, ref, onMounted } from "vue";
 import { cityStore } from "@/store/index";
 import * as Model from "@/models/interface/youbike";
 import { IPointList } from "@/models/interface/common";
@@ -51,6 +51,10 @@ export default defineComponent({
     let youbikeList = reactive<Model.IYoubikeListResponse[]>([]);
     let youbikeStatus = reactive<Model.IYoubikeStatus[]>([]);
     let pointList = reactive<IPointList[]>([]);
+
+    onMounted(() => {
+      EventBus.emit("close-loading");
+    });
 
     youbike_handler.getYoubikeStatusAPI(youbikeStatus, youbikeList);
 
