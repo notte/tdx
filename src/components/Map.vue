@@ -8,6 +8,7 @@ import { IPointList, IBikeRoutePointList } from "@/models/interface/common";
 import { IOtherPointList } from "@/models/interface/other";
 import * as map_handler from "@/utilities/map-handler";
 import { ElNotification } from "element-plus";
+import { cityStore } from "@/store/index";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import "leaflet.markercluster";
@@ -18,6 +19,7 @@ export default defineComponent({
   setup() {
     const latitude = Number(localStorage.getItem("latitude"));
     const longitude = Number(localStorage.getItem("longitude"));
+    const city = cityStore();
 
     let map: L.Map;
     let pointList = ref<IPointList[] | IBikeRoutePointList[]>();
@@ -74,7 +76,88 @@ export default defineComponent({
 
       if (page === "BikeRoute") {
         map.setMinZoom(11);
-        map.flyTo([25.083747, 121.561618], 11);
+        let lat;
+        let lon;
+
+        switch (city.en) {
+          case "Taipei":
+            lat = 25.083747;
+            lon = 121.561618;
+            break;
+          case "Taoyuan":
+            lat = 24.93759;
+            lon = 121.2168;
+            break;
+          case "Taichung":
+            lat = 24.23321;
+            lon = 120.9417;
+            break;
+          case "Tainan":
+            lat = 23.1417;
+            lon = 120.2513;
+            break;
+          case "Kaohsiung":
+            lat = 23.01087;
+            lon = 120.666;
+            break;
+          case "Keelung":
+            lat = 25.10898;
+            lon = 121.7081;
+            break;
+          case "HsinchuCounty":
+            lat = 24.80395;
+            lon = 120.9647;
+            break;
+          case "MiaoliCounty":
+            lat = 24.48927;
+            lon = 120.9417;
+            break;
+          case "PingtungCounty":
+            lat = 22.54951;
+            lon = 120.62;
+            break;
+          case "KinmenCounty":
+            lat = 24.43679;
+            lon = 118.3186;
+            break;
+          case "ChiayiCounty":
+            lat = 23.45889;
+            lon = 120.574;
+            break;
+          case "ChanghuaCounty":
+            lat = 23.99297;
+            lon = 120.4818;
+            break;
+          case "YunlinCounty":
+            lat = 23.75585;
+            lon = 120.3897;
+            break;
+          case "HualienCounty":
+            lat = 23.7569;
+            lon = 121.3542;
+            break;
+          case "YilanCounty":
+            lat = 24.69295;
+            lon = 121.7195;
+            break;
+          case "TaitungCounty":
+            lat = 22.98461;
+            lon = 120.9876;
+            break;
+          case "NantouCounty":
+            lat = 23.83876;
+            lon = 120.9876;
+            break;
+          default:
+            break;
+        }
+
+        if (city.en.indexOf("NewTaipei") === 0) {
+          lat = 24.91571;
+          lon = 121.6739;
+        }
+
+        map.flyTo([lat, lon], 11);
       }
     });
 

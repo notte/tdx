@@ -51,6 +51,9 @@ export default defineComponent({
       return Current.value === page ? true : false;
     }
     function clickTab(page: Status.TabType) {
+      if (page === localStorage.getItem("tab")) {
+        return;
+      }
       Current.value = page;
       EventBus.emit("show-loading");
       EventBus.emit("click-tab", page);

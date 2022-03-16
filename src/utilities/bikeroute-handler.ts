@@ -43,6 +43,14 @@ export function getBikeRouteAPI(
   Api.getBikeRoute(city).then((response: Model.IBikeRouteResponse[]) => {
     bikeroute = Object.assign(bikeroute, response);
 
+    // for (const index in bikeroute as Model.IBikeRouteResponse[]) {
+    //   if (bikeroute[index].RoadSectionStart === undefined) {
+    //     bikeroute.splice(Number(index), 1);
+    //   }
+    //   if (bikeroute[index].RoadSectionEnd === undefined) {
+    //     bikeroute.splice(Number(index), 1);
+    //   }
+    // }
     for (const item of bikeroute) {
       setRoutePoint(item)
         .then((res) => {
@@ -60,13 +68,5 @@ export function getBikeRouteAPI(
     bikeroute.sort((a, b) => {
       return Number(a.CyclingLength) - Number(b.CyclingLength);
     });
-    for (const index in bikeroute as Model.IBikeRouteResponse[]) {
-      if (bikeroute[index].RoadSectionStart === undefined) {
-        bikeroute.splice(Number(index), 1);
-      }
-      if (bikeroute[index].RoadSectionEnd === undefined) {
-        bikeroute.splice(Number(index), 1);
-      }
-    }
   });
 }

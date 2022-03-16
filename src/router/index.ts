@@ -12,7 +12,7 @@ const routes: Array<RouteRecordRaw> = [
     component: () => import("@/views/MapView.vue"),
   },
   {
-    path: "/:id",
+    path: "/city",
     name: "City",
     component: () => import("@/views/CityView.vue"),
   },

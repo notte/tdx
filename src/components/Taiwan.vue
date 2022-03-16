@@ -52,7 +52,9 @@ export default defineComponent({
               return d.properties["COUNTYENG"].split(" ")[0];
             })
             .on("click", (e, d) => {
-              city.en = d.properties["COUNTYENG"].split(" ")[0];
+              city.en = d.properties["COUNTYENG"]
+                .replace("City", "")
+                .replace(" ", "");
               city.cn = d.properties["COUNTYNAME"];
               if (document.querySelector(".active")) {
                 document.querySelector(".active")?.classList.remove("active");
