@@ -157,12 +157,16 @@ export async function createOtherMarkers(
     if (item.opentime === undefined) {
       item.opentime = "";
     }
+    if (item.phone === undefined) {
+      item.phone = "";
+    }
 
     const marker = L.marker([item.latitude, item.longitude]);
     const popup = L.popup({
       keepInView: true,
       closeButton: false,
-      maxHeight: 100,
+      maxHeight: 120,
+      maxWidth: 200,
     }).setContent(
       "<h2>" +
         item.name +
@@ -172,6 +176,9 @@ export async function createOtherMarkers(
         "</p>" +
         "<p>" +
         item.opentime +
+        "</p>" +
+        "<p>" +
+        item.phone +
         "</p>"
     );
     marker.on("click", () => {

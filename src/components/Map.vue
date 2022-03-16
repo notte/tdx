@@ -130,11 +130,6 @@ export default defineComponent({
         map
       );
     });
-
-    return {
-      latitude,
-      longitude,
-    };
   },
 });
 </script>

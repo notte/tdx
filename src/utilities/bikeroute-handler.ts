@@ -1,5 +1,6 @@
 import * as Model from "@/models/interface/bikeroute";
 import EventBus from "@/utilities/event-bus";
+import Api from "@/api/bikeroute";
 import Wkt from "wicket";
 
 export async function setRoutePoint(
@@ -32,4 +33,31 @@ export function getClickedRoute(
   Array[index].classList.value = "item active";
   scrollDOM.scrollTop = 126 * index;
   EventBus.emit("route-click-event", route);
+}
+
+export function getBikeRouteAPI(
+  city: string,
+  bikeroute: Model.IBikeRouteResponse[]
+): void {
+  Api.getBikeRoute(city).then((response: Model.IBikeRouteResponse[]) => {
+    bikeroute = Object.assign(bikeroute, response);
+
+    for (const item of bikeroute) {
+      setRoutePoint(item).then((res) => {
+        item.GeometryArray = res;
+      });
+    }
+
+    bikeroute.sort((a, b) => {
+      return Number(a.CyclingLength) - Number(b.CyclingLength);
+    });
+    for (const index in bikeroute as Model.IBikeRouteResponse[]) {
+      if (bikeroute[index].RoadSectionStart === undefined) {
+        bikeroute.splice(Number(index), 1);
+      }
+      if (bikeroute[index].RoadSectionEnd === undefined) {
+        bikeroute.splice(Number(index), 1);
+      }
+    }
+  });
 }

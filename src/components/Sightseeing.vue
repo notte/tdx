@@ -107,6 +107,7 @@ export default defineComponent({
             longitude: item.Position.PositionLon,
             address: item.Address,
             opentime: item.OpenTime,
+            phone: item.Phone,
           });
         }
         EventBus.emit("get-other-list", [pointList, "scenicspot"]);
@@ -150,6 +151,7 @@ export default defineComponent({
             latitude: item.Position.PositionLat,
             longitude: item.Position.PositionLon,
             address: item.Address,
+            phone: item.Phone,
           });
         }
         EventBus.emit("get-other-list", [pointList, "hotel"]);

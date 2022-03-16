@@ -4,6 +4,7 @@ export interface IOtherPointList {
   longitude: number;
   address: string | undefined;
   opentime?: string;
+  phone?: string;
 }
 
 export interface IGetFoodResponse {
