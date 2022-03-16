@@ -4,14 +4,17 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import { useLoading } from "vue-loading-overlay";
-import EventBus from "@/utilities/event-bus";
 import { ElNotification } from "element-plus";
+import EventBus from "@/utilities/event-bus";
 import "@/assets/scss/common.scss";
 
 export default defineComponent({
   components: {},
   setup() {
     const options = { enableHighAccuracy: true };
+    // const taipeiStation: number[] = [121.5173399, 25.0475613];
+    // localStorage.setItem("latitude", String([taipeiStation[1]]));
+    // localStorage.setItem("longitude", String(taipeiStation[0]));
 
     const $loading = useLoading();
     let loader;
@@ -45,8 +48,6 @@ export default defineComponent({
         type: "error",
       });
     }
-
-    return {};
   },
 });
 </script>
