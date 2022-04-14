@@ -12,9 +12,11 @@ export default defineComponent({
   components: {},
   setup() {
     const options = { enableHighAccuracy: true };
-    // const taipeiStation: number[] = [121.5173399, 25.0475613];
-    // localStorage.setItem("latitude", String([taipeiStation[1]]));
-    // localStorage.setItem("longitude", String(taipeiStation[0]));
+    const taipeiStation: number[] = [121.5173399, 25.0475613];
+
+    EventBus.emit("show-loading");
+
+    navigator.geolocation.getCurrentPosition(success, error, options);
 
     const $loading = useLoading();
     let loader;
@@ -35,13 +37,15 @@ export default defineComponent({
       }
     });
 
-    navigator.geolocation.getCurrentPosition(success, error, options);
-
     function success(location) {
       localStorage.setItem("latitude", String(location.coords.latitude));
       localStorage.setItem("longitude", String(location.coords.longitude));
+      EventBus.emit("close-loading");
     }
     function error(error) {
+      localStorage.setItem("latitude", String([taipeiStation[1]]));
+      localStorage.setItem("longitude", String(taipeiStation[0]));
+      EventBus.emit("close-loading");
       ElNotification({
         title: "Error",
         message: error.message,
