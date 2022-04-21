@@ -162,6 +162,9 @@ export default defineComponent({
     });
 
     EventBus.on("get-bike-list", (data) => {
+      for (let item of markers.value) {
+        map.removeLayer(item as L.Marker);
+      }
       pointList.value = data as IPointList[];
       map_handler
         .createYoubikeMarkers(pointList.value, markers.value as L.Marker[], map)

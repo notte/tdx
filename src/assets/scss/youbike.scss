@@ -6,6 +6,12 @@ $grey: #c2c2c2;
     overflow-y: auto;
     scroll-behavior: smooth;
 
+    p.msg {
+        color: #467599;
+        font-weight: 900;
+        text-align: right;
+    }
+
     .item {
         color: $black;
         cursor: pointer;

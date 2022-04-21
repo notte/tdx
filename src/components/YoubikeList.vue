@@ -1,5 +1,6 @@
 <template>
   <div class="youbike" ref="scrollDOM">
+    <p class="msg">每 20 秒刷新</p>
     <div class="list" ref="getListDOM">
       <div
         :class="item.StationUID + ' ' + 'item'"
@@ -33,7 +34,14 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, watch, reactive, ref, onMounted } from "vue";
+import {
+  defineComponent,
+  watch,
+  reactive,
+  ref,
+  onBeforeUnmount,
+  onMounted,
+} from "vue";
 import { cityStore } from "@/store/index";
 import * as Model from "@/models/interface/youbike";
 import { IPointList } from "@/models/interface/common";
@@ -48,18 +56,62 @@ export default defineComponent({
     const getListDOM = ref();
     const scrollDOM = ref();
     const getClickedBike = youbike_handler.getClickedBike;
+
+    let pointList = reactive<IPointList[]>([]);
     let youbikeList = reactive<Model.IYoubikeListResponse[]>([]);
     let youbikeStatus = reactive<Model.IYoubikeStatus[]>([]);
-    let pointList = reactive<IPointList[]>([]);
 
-    onMounted(() => {
-      EventBus.emit("close-loading");
-    });
+    youbike_handler.getYoubikeStatusAPI(youbikeStatus);
 
-    youbike_handler.getYoubikeStatusAPI(youbikeStatus, youbikeList);
+    const timerId = setInterval(() => {
+      youbike_handler.getYoubikeStatusAPI(youbikeStatus);
+    }, 2000);
 
-    watch([() => youbikeList.length, () => youbikeStatus.length], () => {
-      youbike_handler.renderYoubikeList(youbikeList, pointList, youbikeStatus);
+    watch(
+      () => youbikeStatus,
+      () => {
+        if (youbikeList.length === 0) {
+          youbike_handler.getYoubikeListAPI(youbikeList);
+        } else {
+          for (const item of youbikeList) {
+            const status = youbikeStatus.find(
+              (element) => element.StationID === item.StationID
+            );
+            item.AvailableRentBikes = status?.AvailableRentBikes;
+            item.AvailableReturnBikes = status?.AvailableReturnBikes;
+            console.log(item.AvailableRentBikes, item.AvailableReturnBikes);
+          }
+          console.log("1");
+        }
+      },
+      { deep: true }
+    );
+
+    watch(
+      () => youbikeList,
+      () => {
+        youbike_handler.combineList(youbikeList, youbikeStatus, pointList);
+      },
+      { deep: true }
+    );
+
+    watch(
+      () => pointList,
+      () => {
+        // EventBus.emit("get-bike-list", pointList);
+        // console.log(pointList);
+        // console.log(1);
+      }
+      // { deep: true, immediate: true }
+    );
+
+    // onMounted(() => {
+    // EventBus.emit("get-bike-list", pointList);
+    // youbike_handler.setMap(pointList);
+    // });
+
+    onBeforeUnmount(() => {
+      clearInterval(timerId);
     });
 
     EventBus.on("map-click-event", (data) => {

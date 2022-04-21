@@ -20,8 +20,7 @@ const distance = ref<string>(
 );
 
 export async function getYoubikeStatusAPI(
-  youbikeStatus: Model.IYoubikeStatus[],
-  youbikeList: Model.IYoubikeListResponse[]
+  youbikeStatus: Model.IYoubikeStatus[]
 ): Promise<boolean> {
   Api.getYoubikeStatus(distance.value)
     .then((response: Model.IYoubikeStatus[]) => {
@@ -34,7 +33,6 @@ export async function getYoubikeStatusAPI(
         type: "error",
       });
     });
-  await getYoubikeListAPI(youbikeList);
   return Promise.resolve(true);
 }
 
@@ -54,39 +52,37 @@ export function getYoubikeListAPI(
     });
 }
 
-export async function renderYoubikeList(
+export async function combineList(
   youbikeList: Model.IYoubikeListResponse[],
-  pointList: IPointList[],
-  youbikeStatus: Model.IYoubikeStatus[]
+  youbikeStatus: Model.IYoubikeStatus[],
+  pointList: IPointList[]
 ): Promise<boolean> {
+  pointList = [];
   const UserPosition = new L.LatLng(latitude, longitude);
 
   for (let item of youbikeList) {
-    const status = youbikeStatus.find(
-      (element) => element.StationID === item.StationID
-    );
     pointList.push({
       StationUID: item.StationUID,
       latitude: item.StationPosition.PositionLat,
       longitude: item.StationPosition.PositionLon,
     });
+    const status = youbikeStatus.find(
+      (element) => element.StationID === item.StationID
+    );
     const BikeStation = new L.LatLng(
       item.StationPosition.PositionLat,
       item.StationPosition.PositionLon
     );
-
     const line = new GeodesicLine();
     const distance = line.distance(UserPosition, BikeStation);
-
     item = Object.assign(item, status, {
       distance: Math.floor(distance),
     });
   }
-
   youbikeList.sort((a, b) => {
     return Number(a.distance) - Number(b.distance);
   });
-
+  console.log(pointList);
   EventBus.emit("get-bike-list", pointList);
   return Promise.resolve(true);
 }
