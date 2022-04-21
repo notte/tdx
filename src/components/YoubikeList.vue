@@ -65,7 +65,7 @@ export default defineComponent({
 
     const timerId = setInterval(() => {
       youbike_handler.getYoubikeStatusAPI(youbikeStatus);
-    }, 2000);
+    }, 1000);
 
     watch(
       () => youbikeStatus,
@@ -79,9 +79,9 @@ export default defineComponent({
             );
             item.AvailableRentBikes = status?.AvailableRentBikes;
             item.AvailableReturnBikes = status?.AvailableReturnBikes;
-            console.log(item.AvailableRentBikes, item.AvailableReturnBikes);
+            // console.log(item.AvailableRentBikes, item.AvailableReturnBikes);
           }
-          console.log("1");
+          // console.log("1");
         }
       },
       { deep: true }
@@ -95,23 +95,12 @@ export default defineComponent({
       { deep: true }
     );
 
-    watch(
-      () => pointList,
-      () => {
-        // EventBus.emit("get-bike-list", pointList);
-        // console.log(pointList);
-        // console.log(1);
-      }
-      // { deep: true, immediate: true }
-    );
-
-    // onMounted(() => {
-    // EventBus.emit("get-bike-list", pointList);
-    // youbike_handler.setMap(pointList);
-    // });
-
     onBeforeUnmount(() => {
       clearInterval(timerId);
+    });
+
+    onMounted(() => {
+      EventBus.emit("close-loading");
     });
 
     EventBus.on("map-click-event", (data) => {

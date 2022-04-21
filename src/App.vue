@@ -14,7 +14,7 @@ export default defineComponent({
     const options = { enableHighAccuracy: true };
     const taipeiStation: number[] = [121.5173399, 25.0475613];
 
-    EventBus.emit("show-loading");
+    // EventBus.emit("show-loading");
 
     navigator.geolocation.getCurrentPosition(success, error, options);
 
@@ -40,7 +40,7 @@ export default defineComponent({
     function success(location) {
       localStorage.setItem("latitude", String(location.coords.latitude));
       localStorage.setItem("longitude", String(location.coords.longitude));
-      EventBus.emit("close-loading");
+      // EventBus.emit("close-loading");
     }
     function error(error) {
       localStorage.setItem("latitude", String([taipeiStation[1]]));

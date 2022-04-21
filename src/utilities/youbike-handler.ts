@@ -82,7 +82,6 @@ export async function combineList(
   youbikeList.sort((a, b) => {
     return Number(a.distance) - Number(b.distance);
   });
-  console.log(pointList);
   EventBus.emit("get-bike-list", pointList);
   return Promise.resolve(true);
 }

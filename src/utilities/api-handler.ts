@@ -15,11 +15,12 @@ class handler {
     this.config = {
       baseURL: "https://ptx.transportdata.tw/MOTC/v2/",
       responseType: "json",
-      headers: this.GetAuthorizationHeader(),
+      // headers: this.GetAuthorizationHeader(),
     };
   }
 
   async createAxios(url: string, method: Method): Promise<AxiosResponse> {
+    this.config.headers = await this.GetAuthorizationHeader();
     this.config.url = url;
     this.config.method = method;
     const instance = axios.create();
