@@ -60,17 +60,11 @@ export async function renderYoubikeList(
   youbikeStatus: Model.IYoubikeStatus[]
 ): Promise<boolean> {
   const UserPosition = new L.LatLng(latitude, longitude);
-  let status;
 
-  for (const item of youbikeStatus) {
-    if (item.StationUID === item.StationUID) {
-      status = {
-        AvailableRentBikes: item.AvailableRentBikes,
-        AvailableReturnBikes: item.AvailableReturnBikes,
-      };
-    }
-  }
   for (let item of youbikeList) {
+    const status = youbikeStatus.find(
+      (element) => element.StationID === item.StationID
+    );
     pointList.push({
       StationUID: item.StationUID,
       latitude: item.StationPosition.PositionLat,
