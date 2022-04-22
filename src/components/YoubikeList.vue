@@ -1,6 +1,6 @@
 <template>
   <div class="youbike" ref="scrollDOM">
-    <p class="msg">每 20 秒刷新</p>
+    <p class="msg">每 30 秒刷新</p>
     <div class="list" ref="getListDOM">
       <div
         :class="item.StationUID + ' ' + 'item'"
@@ -65,7 +65,7 @@ export default defineComponent({
 
     const timerId = setInterval(() => {
       youbike_handler.getYoubikeStatusAPI(youbikeStatus);
-    }, 1000);
+    }, 30000);
 
     watch(
       () => youbikeStatus,
@@ -85,7 +85,7 @@ export default defineComponent({
       { deep: true }
     );
 
-    const stopWatchRoom = watch(
+    const stopYoubikeListWatch = watch(
       () => youbikeList,
       () => {
         youbike_handler.combineList(youbikeList, youbikeStatus, pointList);
@@ -96,7 +96,7 @@ export default defineComponent({
     watch(
       () => pointList,
       () => {
-        stopWatchRoom();
+        stopYoubikeListWatch();
         EventBus.emit("get-bike-list", pointList);
       },
       { deep: true }

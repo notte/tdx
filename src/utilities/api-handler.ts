@@ -15,7 +15,6 @@ class handler {
     this.config = {
       baseURL: "https://ptx.transportdata.tw/MOTC/v2/",
       responseType: "json",
-      // headers: this.GetAuthorizationHeader(),
     };
   }
 
@@ -23,6 +22,7 @@ class handler {
     this.config.headers = await this.GetAuthorizationHeader();
     this.config.url = url;
     this.config.method = method;
+
     const instance = axios.create();
 
     instance.interceptors.request.use(
@@ -57,7 +57,7 @@ class handler {
     }
   }
 
-  GetAuthorizationHeader(): AxiosRequestHeaders {
+  private GetAuthorizationHeader(): AxiosRequestHeaders {
     const APPID = "2fb32863865346ed90d14cf06c85479a";
     const APPKey = "cPT6MlWK5aRZjHzHqD7rrnGDj4U";
     const GMTString = new Date().toUTCString();
