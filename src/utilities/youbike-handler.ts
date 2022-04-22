@@ -19,9 +19,9 @@ const distance = ref<string>(
     ")&%24"
 );
 
-export async function getYoubikeStatusAPI(
+export function getYoubikeStatusAPI(
   youbikeStatus: Model.IYoubikeStatus[]
-): Promise<boolean> {
+): void {
   Api.getYoubikeStatus(distance.value)
     .then((response: Model.IYoubikeStatus[]) => {
       youbikeStatus = Object.assign(youbikeStatus, response);
@@ -33,7 +33,6 @@ export async function getYoubikeStatusAPI(
         type: "error",
       });
     });
-  return Promise.resolve(true);
 }
 
 export function getYoubikeListAPI(
@@ -52,14 +51,12 @@ export function getYoubikeListAPI(
     });
 }
 
-export async function combineList(
+export function combineList(
   youbikeList: Model.IYoubikeListResponse[],
   youbikeStatus: Model.IYoubikeStatus[],
   pointList: IPointList[]
-): Promise<boolean> {
-  pointList = [];
+): void {
   const UserPosition = new L.LatLng(latitude, longitude);
-
   for (let item of youbikeList) {
     pointList.push({
       StationUID: item.StationUID,
@@ -82,8 +79,6 @@ export async function combineList(
   youbikeList.sort((a, b) => {
     return Number(a.distance) - Number(b.distance);
   });
-  EventBus.emit("get-bike-list", pointList);
-  return Promise.resolve(true);
 }
 
 export function getClickedBike(

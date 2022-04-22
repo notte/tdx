@@ -79,18 +79,25 @@ export default defineComponent({
             );
             item.AvailableRentBikes = status?.AvailableRentBikes;
             item.AvailableReturnBikes = status?.AvailableReturnBikes;
-            // console.log(item.AvailableRentBikes, item.AvailableReturnBikes);
           }
-          // console.log("1");
         }
       },
       { deep: true }
     );
 
-    watch(
+    const stopWatchRoom = watch(
       () => youbikeList,
       () => {
         youbike_handler.combineList(youbikeList, youbikeStatus, pointList);
+      },
+      { deep: true }
+    );
+
+    watch(
+      () => pointList,
+      () => {
+        stopWatchRoom();
+        EventBus.emit("get-bike-list", pointList);
       },
       { deep: true }
     );
@@ -117,6 +124,7 @@ export default defineComponent({
       city,
       youbikeList,
       youbikeStatus,
+      pointList,
       getListDOM,
       scrollDOM,
       getClickedBike,
